@@ -43,30 +43,37 @@ netParams.scaleConnWeight = 0.001 # Connection weight scale factor
 # Population parameters
 
 
-netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 96} # add dict with params for this pop
-netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64} # add dict with params for this pop
+netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 96} # add dict with params for this pop
+netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 64} # add dict with params for this pop
 netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64} # add dict with params for this pop
 netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 64} # add dict with params for this pop
-netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 150} # add dict with params for this pop
-netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 25} # add dict with params for this pop
+netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 150} # add dict with params for this pop
+netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 25} # add dict with params for this pop
 netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 25} # add dict with params for this pop
-netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 168} # add dict with params for this pop
-netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 72} # add dict with params for this pop
-netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 40} # add dict with params for this pop
+netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 168} # add dict with params for this pop
+netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 72} # add dict with params for this pop
+netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 40} # add dict with params for this pop
 netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 40} # add dict with params for this pop
-netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 192} # add dict with params for this pop
-netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32} # add dict with params for this pop
-netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32} # add dict with params for this pop
+netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192} # add dict with params for this pop
+netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32} # add dict with params for this pop
+netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32} # add dict with params for this pop
 
 
 
 
 
-# Izhi cell params (used in cell properties)
+## Cell types based on Izhikevich, 2007 book
 izhiParams = {}
+## Layer 5 regular spiking (RS) pyramidal cell (fig 8.12 from 2007 book)
 izhiParams['RS'] = {'mod':'Izhi2007b', 'C':1, 'k':0.7, 'vr':-60, 'vt':-40, 'vpeak':35, 'a':0.03, 'b':-2, 'c':-50, 'd':100, 'celltype':1}
+## Rat barrel cortex Low-threshold  spiking (LTS) interneuron (fig8.25 from 2007 book)
 izhiParams['LTS'] = {'mod':'Izhi2007b', 'C':1, 'k':1.0, 'vr':-56, 'vt':-42, 'vpeak':40, 'a':0.03, 'b':8, 'c':-53, 'd':20, 'celltype':4}
+## layer 5 rat visual cortex fast-spiking (FS) interneuron (fig8.27 from 2007 book)
 izhiParams['FS'] = {'mod':'Izhi2007b', 'C':0.2, 'k':1.0, 'vr':-55, 'vt':-40, 'vpeak':25, 'a':0.2, 'b':-2, 'c':-45, 'd':-55, 'celltype':5}
+## Rat reticular thalamic nucleus (RTN) cell  (fig8.32 from 2007 book)
+izhiParams['RTN'] = {'mod':'Izhi2007b', 'C':0.4, 'k':0.25, 'vr':-65, 'vt':-45, 'vpeak':0, 'a':0.015, 'b':10, 'c':-55, 'd':50, 'celltype':7}
+
+
 
 # Cell properties list
 
