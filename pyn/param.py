@@ -102,8 +102,10 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA',
 
 
 # Stimulation parameters
-netParams.stimSourceParams['backgroundE'] = {'type': 'NetStim', 'rate': 10, 'noise': 0.5}  # background inputs
-netParams.stimSourceParams['backgroundI'] = {'type': 'NetStim', 'rate': 10, 'noise': 0.5}  # background inputs
+netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'rate': 50, 'noise': 1}  # background inputs
+  # background inputs
+
+
 netParams.stimSourceParams['stimPsh'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for P_sh
 netParams.stimSourceParams['stimPel'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for P_el
 netParams.stimSourceParams['stimEM'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs)
@@ -114,22 +116,25 @@ netParams.stimSourceParams['stimEM'] = {'type': 'NetStim', 'rate': 'variable', '
 # STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.000013, 'wmax': 50, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.001, \
 #     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 1, 'softthresh': 0, 'verbose':0}
 
-STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 50, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
+STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 0, 'verbose':0}
 
 # Background and stims
 
-netParams.stimTargetParams['bg->E'] = {'source': 'backgroundE',
-    'conds': {'pop': ['ES', 'EM']}, # background -> Exc
+netParams.stimTargetParams['bg->E'] = {'source': 'backgroundS',
+    'conds': {'pop': ['ER2', 'ER']}, # background -> Exc
     'weight': 0.05,
     'delay': 'uniform(1,5)',
     'synMech': 'NMDA'}
 
-netParams.stimTargetParams['bg->I'] = {'source': 'backgroundI',
+netParams.stimTargetParams['bg->I'] = {'source': 'backgroundS',
     'conds': {'pop': ['ISL', 'IML', 'IS', 'IM']}, # background -> Inh
     'weight': 0.05,
     'delay': 'uniform(1,5)',
     'synMech': 'NMDA'}
+
+
+
 
 netParams.stimTargetParams['Pstim_sh->Psh'] = {'source': 'stimPsh',
     'conds': {'pop': 'Psh'},  # Pstim_sh -> P_sh
