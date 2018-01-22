@@ -43,20 +43,20 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 # Population parameters
 
 
-netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 96} # add dict with params for this pop
-netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 64} # add dict with params for this pop
-netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64} # add dict with params for this pop
-netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 64} # add dict with params for this pop
-netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 150} # add dict with params for this pop
-netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 25} # add dict with params for this pop
-netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 25} # add dict with params for this pop
-netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 168} # add dict with params for this pop
-netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 72} # add dict with params for this pop
-netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 40} # add dict with params for this pop
-netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 40} # add dict with params for this pop
-netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192} # add dict with params for this pop
-netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32} # add dict with params for this pop
-netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32} # add dict with params for this pop
+netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 96, 'ynormRange':[-1, -1]} # add dict with params for this pop
+netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 64, 'ynormRange':[-1, -1]} # add dict with params for this pop
+netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64, 'ynormRange':[-1, -1]} # add dict with params for this pop
+netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 64,'ynormRange':[-1, -1]} # add dict with params for this pop
+netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 150, 'ynormRange':[0.1, 0.31]} # add dict with params for this pop
+netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 25,  'ynormRange':[0.1, 0.31]} # add dict with params for this pop
+netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 25, 'ynormRange':[0.1, 0.31]} # add dict with params for this pop
+netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 168, 'ynormRange':[0.31, 0.52]} # add dict with params for this pop
+netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 72, 'ynormRange':[0.52, 0.77]} # add dict with params for this pop
+netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 40, 'ynormRange':[0.31, 0.77]} # add dict with params for this pop
+netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 40, 'ynormRange':[0.31, 0.77]} # add dict with params for this pop
+netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192, 'ynormRange':[0.77, 1.00]} # add dict with params for this pop
+netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32, 'ynormRange':[0.77, 1.00]} # add dict with params f1or this pop
+netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32, 'ynormRange':[0.77, 1.00]} # add dict with params for this pop
 netParams.connList
 
 
@@ -74,43 +74,31 @@ izhiParams['RTN'] = {'mod':'Izhi2007b', 'C':0.4, 'k':0.25, 'vr':-65, 'vt':-45, '
 
 
 
-# Cell properties list  IZiA
+#Izhikevich cells 2007a
 
+cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'RS', 'cellModel':'Izhi2007a'},
+        fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS', 'host':'dummy'})
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB', ]  # specify its own synapses
 
+cellRule = netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'LTS', 'cellModel':'Izhi2007a'},
+        fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS', 'host':'dummy'})
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB', ]  # specify its own synapses
 
-## RS Izhi cell params
-cellRule = {'conds': {'cellType': 'RS', 'cellModel': 'Izhi'}, 'secs': {}}
-cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
-cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
-cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['RS']
-netParams.cellParams['RS_Izhi'] = cellRule  # add dict to list of cell properties
+cellRule = netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'FS', 'cellModel':'Izhi2007a'},
+        fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS', 'host':'dummy'})
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
-## LTS Izhi cell params
-cellRule = {'conds': {'cellType': 'LTS', 'cellModel': 'Izhi'}, 'secs': {}}
-cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
-cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
-cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['LTS']
-netParams.cellParams['LTS_Izhi'] = cellRule  # add dict to list of cell properties
-
-## FS Izhi cell params
-cellRule = {'conds': {'cellType': 'FS', 'cellModel': 'Izhi'}, 'secs': {}}
-cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
-cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
-cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['FS']
-netParams.cellParams['FS_Izhi'] = cellRule  # add dict to list of cell properties
-
-
-
+cellRule = netParams.importCellParams(label='RTN_Izhi', conds={'cellType': 'RTN', 'cellModel':'Izhi2007a'},
+        fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RTN', 'host':'dummy'})
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
+cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
 
 
 # Synaptic mechanism parameters  IziA
-
-
-netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.05, 'tau2': 5.3, 'e': 0} # AMPA
-netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 0.15, 'tau2': 1.50, 'e': 0} # NMDA
-netParams.synMechParams['GABA'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
-
 
 
 # Stimulation parameters
@@ -160,6 +148,8 @@ netParams.stimTargetParams['EMstim->EM'] = {'source': 'stimEM',
     'weight': 0.4,
     'delay': 'uniform(1,5)',
     'synMech': 'NMDA'}
+
+
 
 
 # Sensory
