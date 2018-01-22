@@ -38,7 +38,7 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 # NETWORK PARAMETERS
 ###############################################################################
 
-netParams.scaleConnWeight = 0.001 # Connection weight scale factor
+#netParams.scaleConnWeight = 0.001 # Connection weight scale factor
 
 # Population parameters
 
@@ -57,9 +57,7 @@ netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells'
 netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192} # add dict with params for this pop
 netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32} # add dict with params for this pop
 netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32} # add dict with params for this pop
-
-
-
+netParams.connList
 
 
 ## Cell types based on Izhikevich, 2007 book
@@ -75,7 +73,10 @@ izhiParams['RTN'] = {'mod':'Izhi2007b', 'C':0.4, 'k':0.25, 'vr':-65, 'vt':-45, '
 
 
 
-# Cell properties list
+
+# Cell properties list  IZiA
+
+
 
 ## RS Izhi cell params
 cellRule = {'conds': {'cellType': 'RS', 'cellModel': 'Izhi'}, 'secs': {}}
@@ -99,7 +100,13 @@ cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['FS']
 netParams.cellParams['FS_Izhi'] = cellRule  # add dict to list of cell properties
 
 
-# Synaptic mechanism parameters
+
+
+
+
+# Synaptic mechanism parameters  IziA
+
+
 netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.05, 'tau2': 5.3, 'e': 0} # AMPA
 netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 0.15, 'tau2': 1.50, 'e': 0} # NMDA
 netParams.synMechParams['GABA'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
