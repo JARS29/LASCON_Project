@@ -41,24 +41,24 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 #netParams.scaleConnWeight = 0.001 # Connection weight scale factor
 
 # Population parameters
-
-
-netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 96, 'ynormRange':[-1, -1]} # add dict with params for this pop
-netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 64, 'ynormRange':[-1, -1]} # add dict with params for this pop
-netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64, 'ynormRange':[-1, -1]} # add dict with params for this pop
-netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 64,'ynormRange':[-1, -1]} # add dict with params for this pop
-netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 150, 'ynormRange':[0.1, 0.31]} # add dict with params for this pop
-netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 25,  'ynormRange':[0.1, 0.31]} # add dict with params for this pop
-netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 25, 'ynormRange':[0.1, 0.31]} # add dict with params for this pop
-netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 168, 'ynormRange':[0.31, 0.52]} # add dict with params for this pop
-netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 72, 'ynormRange':[0.52, 0.77]} # add dict with params for this pop
-netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 40, 'ynormRange':[0.31, 0.77]} # add dict with params for this pop
-netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 40, 'ynormRange':[0.31, 0.77]} # add dict with params for this pop
-netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192, 'ynormRange':[0.77, 1.00]} # add dict with params for this pop
-netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32, 'ynormRange':[0.77, 1.00]} # add dict with params f1or this pop
-netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32, 'ynormRange':[0.77, 1.00]} # add dict with params for this pop
-netParams.connList
-
+netParams.popParams['PMd'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 96, 'ynormRange':[-1, -1]} 
+netParams.popParams['ASC'] = {'cellModel': 'Izhi', 'cellType': 'RTN', 'numCells': 64, 'ynormRange':[-1, -1]} 
+netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 64, 'ynormRange':[-1, -1]} 
+netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 64,'ynormRange':[-1, -1]} 
+## L2/3 Cells
+netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 150, 'ynormRange':[0.1, 0.31]} 
+netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 25,  'ynormRange':[0.1, 0.31]} 
+netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 25, 'ynormRange':[0.1, 0.31]} 
+## L5A Cells
+netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 168, 'ynormRange':[0.31, 0.52]}
+netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 40, 'ynormRange':[0.31, 0.77]}
+netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 40, 'ynormRange':[0.31, 0.77]} 
+## L5B Cells
+netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 72, 'ynormRange':[0.52, 0.77]} 
+## L6 Cells
+netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 192, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS', 'numCells': 32, 'ynormRange':[0.77, 1.00]} 
+netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS', 'numCells': 32, 'ynormRange':[0.77, 1.00]}
 
 ## Cell types based on Izhikevich, 2007 book
 izhiParams = {}
@@ -71,35 +71,43 @@ izhiParams['FS'] = {'mod':'Izhi2007b', 'C':0.2, 'k':1.0, 'vr':-55, 'vt':-40, 'vp
 ## Rat reticular thalamic nucleus (RTN) cell  (fig8.32 from 2007 book)
 izhiParams['RTN'] = {'mod':'Izhi2007b', 'C':0.4, 'k':0.25, 'vr':-65, 'vt':-45, 'vpeak':0, 'a':0.015, 'b':10, 'c':-55, 'd':50, 'celltype':7}
 
-
-
-
-#Izhikevich cells 2007a
-
+# Cell properties list
 cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'RS', 'cellModel':'Izhi2007a'},
         fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS', 'host':'dummy'})
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB', ]  # specify its own synapses
+netParams.cellParams['RS_Izhi'] = cellRule
 
 cellRule = netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'LTS', 'cellModel':'Izhi2007a'},
         fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS', 'host':'dummy'})
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB', ]  # specify its own synapses
+netParams.cellParams['LTS_Izhi'] = cellRule
 
 cellRule = netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'FS', 'cellModel':'Izhi2007a'},
         fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS', 'host':'dummy'})
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+netParams.cellParams['FS_Izhi'] = cellRule
 
 cellRule = netParams.importCellParams(label='RTN_Izhi', conds={'cellType': 'RTN', 'cellModel':'Izhi2007a'},
         fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RTN', 'host':'dummy'})
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+netParams.cellParams['RTN_Izhi'] = cellRule
 
+###############################################################################
+# SYNAPTIC PARAMETERS
+###############################################################################
 
+netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.05, 'tau2': 5.3, 'e': 0} # AMPA
+netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 0.15, 'tau2': 1.50, 'e': 0} # NMDA
+netParams.synMechParams['GABAA'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
+netParams.synMechParams['GABAB'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAB
 
-# Synaptic mechanism parameters  IziA
-
+###############################################################################
+# STIMULATION PARAMETERS
+###############################################################################
 
 # Stimulation parameters
 netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'rate': 50, 'noise': 1}  # background inputs
@@ -110,9 +118,6 @@ netParams.stimSourceParams['stimPsh'] = {'type': 'NetStim', 'rate': 'variable', 
 netParams.stimSourceParams['stimPel'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for P_el
 netParams.stimSourceParams['stimEM'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs)
 
-
-
-# Connectivity parameters
 # STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.000013, 'wmax': 50, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.001, \
 #     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 1, 'softthresh': 0, 'verbose':0}
 
@@ -156,9 +161,27 @@ netParams.stimTargetParams['EMstim->EM'] = {'source': 'stimEM',
 
 
 
+###############################################################################
+# CONNECTIVITY PARAMETERS
+###############################################################################
 
 # Sensory
+netParams.addConnParams(None,
+    {'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER2'},
+    'weight': 0.66,
+    'probability': 0.2,
+    'delay': ,
+    'synMech': 'AMPA'})
 
+netParams.addConnParams(None,
+    {'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'EB5'},
+    'weight': ,
+    'probability': 0.36,
+    'delay': ,
+    'synMech': 'AMPA'})
+
+
+# Further connections are the example
 netParams.addConnParams(None,
     {'preConds': {'pop': ['Psh', 'Pel']}, 'postConds': {'pop': 'ES'},  # P_sh,P_el -> ES
     'weight': 4,
