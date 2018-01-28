@@ -1,5 +1,7 @@
 *.pyc
 *.png
+*.txt
+*.mat
 
 _target_0_error
 
