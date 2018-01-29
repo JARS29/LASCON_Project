@@ -73,8 +73,8 @@ sim.trialReset = True # whether to reset the arm after every trial time
 sim.timeoflastreset = 0 # time when arm was last reseted
 
 # train/test params
-sim.trainTime = 10 * 1e3
-sim.testTime = 10 * 1e3
+sim.trainTime = 1 * 1e3
+sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
 sim.numTargets = 1

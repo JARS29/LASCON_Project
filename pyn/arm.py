@@ -399,9 +399,11 @@ class Arm:
                 close(self.fig) # close arm animation graph 
             if self.graphs: # plot graphs
                 self.plotTraj()
-                #self.plotAngs()
-                #self.plotMotorCmds()
-                #self.plotRL()
+                self.plotAngs()
+                self.plotMotorCmds()
+                self.plotRL()
+                ion()
+                show()
     
         
 
