@@ -292,7 +292,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive_init[_mechtype] = _net_init;
  pnt_receive_size[_mechtype] = 5;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 Izhi2007a c:/Users/JARS/netpyne/netpyne/examples/RL/izhi2007a.mod\n");
+ 	ivoc_help("help ?1 Izhi2007a c:/Users/JARS/Documents/GitHub/LASCON/LASCON_Project/pyn/izhi2007a.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
