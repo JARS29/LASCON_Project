@@ -2,6 +2,9 @@
 *.png
 *.txt
 *.mat
+*.o
+*.c
+*.dll
 
 _target_0_error
 
