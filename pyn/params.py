@@ -23,17 +23,40 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 # NETWORK PARAMETERS
 ###############################################################################
 
-netParams.scaleConnWeight = 0.001 # Connection weight scale factor
+#netParams.scaleConnWeight = 0.001 # Connection weight scale factor
+
+
+spkTimes = [range(0,1000,20), range(0,1000,20)]  #LEEEEMBRAAAAAAAAAAAAAAAAR
+
+# create list of pulses (each item is a dict with pulse params)
+pulses = [{'start': 10, 'end': 100, 'rate': 200, 'noise': 0.5},
+         {'start': 400, 'end': 500, 'rate': 1, 'noise': 0.0}]
+
 
 # Population parameters
-netParams.popParams['Psh'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40} # add dict with params for this pop
-netParams.popParams['Pel'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40} # add dict with params for this pop
-netParams.popParams['ES'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 80} # add dict with params for this pop
-netParams.popParams['ISL'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 10} # add dict with params for this pop
-netParams.popParams['IS'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 10} # add dict with params for this pop
-netParams.popParams['EM'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 80} # add dict with params for this pop
-netParams.popParams['IML'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 10} # add dict with params for this pop
-netParams.popParams['IM'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 10} # add dict with params for this pop
+
+
+netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes, 'pulses': pulses, 'numCells': 96, 'ynormRange':[-1, -1]}
+netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'cellType': 'RTN', 'numCells': 64, 'ynormRange':[-1, -1]}
+netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 64, 'ynormRange':[-1, -1]}
+netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 64,'ynormRange':[-1, -1]}
+## L2/3 Cells
+netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 150, 'ynormRange':[0.1, 0.31]}
+netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 25,  'ynormRange':[0.1, 0.31]}
+netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 25, 'ynormRange':[0.1, 0.31]}
+## L5A Cells
+netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 168, 'ynormRange':[0.31, 0.52]}
+netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40, 'ynormRange':[0.31, 0.77]}
+netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40, 'ynormRange':[0.31, 0.77]}
+## L5B Cells
+netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 72, 'ynormRange':[0.52, 0.77]}
+## L6 Cells
+netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 192, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 32, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 32, 'ynormRange':[0.77, 1.00]}
+
+#netParams.popParams['artif3'] = {'cellModel': 'VecStim', 'numCells': 50, 'spkTimes': spkTimes, 'pulses': pulses}
+
 
 
 # Izhi cell params (used in cell properties)
@@ -41,8 +64,8 @@ netParams.popParams['IM'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCel
 # Cell properties list
 
 
-## RS Izhi cell paramsna
 
+### Izhi2007a (independent voltage)
 cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
 	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS', 'host':'dummy'})
 netParams.renameCellParamsSec('RS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
@@ -68,14 +91,20 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that 
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
 
+
+cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
+ 	fileName='nsloc.py', cellName='nslocCell')
+netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
+
+
+
+
 # Synaptic mechanism parameters
 
+
+
 # Stimulation parameters
-netParams.stimSourceParams['backgroundE'] = {'type': 'NetStim', 'rate': 10, 'noise': 0.5}  # background inputs
-netParams.stimSourceParams['backgroundI'] = {'type': 'NetStim', 'rate': 10, 'noise': 0.5}  # background inputs
-netParams.stimSourceParams['stimPsh'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for P_sh
-netParams.stimSourceParams['stimPel'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for P_el 
-netParams.stimSourceParams['stimEM'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs) 
+netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'rate': 100, 'noise': 1}  # background inputs
 
 
 
@@ -83,38 +112,38 @@ netParams.stimSourceParams['stimEM'] = {'type': 'NetStim', 'rate': 'variable', '
 # STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.000013, 'wmax': 50, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.001, \
 #     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 1, 'softthresh': 0, 'verbose':0}
 
-STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 50, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
+STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 0, 'verbose':0}
 
 # Background and stims
 
-netParams.stimTargetParams['bg->E'] = {'source': 'backgroundE', 
+netParams.stimTargetParams['bg->E'] = {'source': 'backgroundS',
     'conds': {'pop': ['ES', 'EM']}, # background -> Exc
-    'weight': 0.05, 
+    'weight': 5,
     'delay': 'uniform(1,5)',
     'sec': 'soma'}
 
 netParams.stimTargetParams['bg->I'] = {'source': 'backgroundI', 
     'conds': {'pop': ['ISL', 'IML', 'IS', 'IM']}, # background -> Inh
-    'weight': 0.05, 
+    'weight': 5,
     'delay': 'uniform(1,5)',
     'sec': 'soma'}
 
 netParams.stimTargetParams['Pstim_sh->Psh'] = {'source': 'stimPsh', 
     'conds': {'pop': 'Psh'},  # Pstim_sh -> P_sh
-    'weight': 0.1,                   
+    'weight': 5,
     'delay': 1,     
     'sec': 'soma'}
 
 netParams.stimTargetParams['Pstim_el->Pel'] = {'source': 'stimPel', 
     'conds': {'pop': 'Pel'},  # Pstim_el -> P_el
-    'weight': 0.1,                  
+    'weight': 5,
     'delay': 1,     
     'sec': 'soma'}
 
 netParams.stimTargetParams['EMstim->EM'] = {'source': 'stimEM', 
     'conds': {'pop': 'EM'}, # EMstim-> EM
-    'weight': 0.4, 
+    'weight': 5,
     'delay': 'uniform(1,5)',
     'sec': 'soma'}
 
@@ -123,7 +152,7 @@ netParams.stimTargetParams['EMstim->EM'] = {'source': 'stimEM',
 
 netParams.connParams['Psh,P_el->ES'] = {
     'preConds': {'pop': ['Psh', 'Pel']}, 'postConds': {'pop': 'ES'},  # P_sh,P_el -> ES
-    'weight': 4,      
+    'weight': 5,
     'probability': 0.1125,              
     'delay': 5,
     'synMech': 'AMPA',
@@ -132,7 +161,7 @@ netParams.connParams['Psh,P_el->ES'] = {
 
 netParams.connParams['ES->ES'] = {
     'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'ES'},  # ES -> ES
-    'weight': 1.98,      
+    'weight': 5,
     'probability': 0.05625,              
     'delay': 5,
     'sec': 'soma',
@@ -141,7 +170,7 @@ netParams.connParams['ES->ES'] = {
 
 netParams.connParams['ES->IS'] = {
     'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'IS'},  # ES -> IS
-    'weight': 0.48375,      
+    'weight': 5,
     'probability': 1.150,              
     'delay': 5,
     'sec': 'soma',
@@ -149,7 +178,7 @@ netParams.connParams['ES->IS'] = {
 
 netParams.connParams['ES->ISL'] = {
     'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'ISL'},  # ES -> ISL
-    'weight': 0.57375,      
+    'weight': 5,
     'probability': 0.575,              
     'delay': 5,
     'sec': 'soma',
@@ -157,7 +186,7 @@ netParams.connParams['ES->ISL'] = {
 
 netParams.connParams['ES->EM'] = {
     'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'EM'},  # ES -> EM (plastic)
-    'weight': 2.640,      
+    'weight': 5,
     'probability': 0.33750,              
     'delay': 5,
     'synMech': 'AMPA',
@@ -167,7 +196,7 @@ netParams.connParams['ES->EM'] = {
 
 netParams.connParams['IS->ES'] = {
     'preConds': {'pop': 'IS'}, 'postConds': {'pop': 'ES'},  # IS -> ES
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.495,              
     'delay': 5,
     'sec': 'soma',
@@ -176,7 +205,7 @@ netParams.connParams['IS->ES'] = {
 
 netParams.connParams['IS->IS'] = {
     'preConds': {'pop': 'IS'}, 'postConds': {'pop': 'IS'},  # IS -> IS
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.69750,              
     'delay': 5,
     'sec': 'soma',
@@ -184,7 +213,7 @@ netParams.connParams['IS->IS'] = {
 
 netParams.connParams['IS->ISL'] = {
     'preConds': {'pop': 'IS'}, 'postConds': {'pop': 'ISL'},  # IS -> ISL
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.38250,              
     'delay': 5,
     'sec': 'soma',
@@ -192,7 +221,7 @@ netParams.connParams['IS->ISL'] = {
 
 netParams.connParams['ISL->ES'] = {
     'preConds': {'pop': 'ISL'}, 'postConds': {'pop': 'IS'},  # ISL -> ES
-    'weight': 2.25,      
+    'weight': 5,
     'probability': 0.39375,              
     'delay': 5,
     'sec': 'soma',
@@ -200,7 +229,7 @@ netParams.connParams['ISL->ES'] = {
 
 netParams.connParams['ISL->IS'] = {
     'preConds': {'pop': 'ISL'}, 'postConds': {'pop': 'IS'},  # ISL -> IS
-    'weight': 2.25,      
+    'weight': 5,
     'probability': 0.59625,              
     'delay': 5,
     'sec': 'soma',
@@ -208,7 +237,7 @@ netParams.connParams['ISL->IS'] = {
 
 netParams.connParams['ISL->ISL'] = {
     'preConds': {'pop': 'ISL'}, 'postConds': {'pop': 'ISL'},  # ISL -> ISL
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.10125,
     'sec': 'soma',
     'delay': 5,
@@ -217,7 +246,7 @@ netParams.connParams['ISL->ISL'] = {
 
 netParams.connParams['EM->ES'] = {
     'preConds': {'pop': 'EM'}, 'postConds': {'pop': 'ES'},  # EM -> ES
-    'weight': 0.72,      
+    'weight': 5,
     'probability': 0.01125,              
     'delay': 5,     
     'sec': 'soma',
@@ -231,7 +260,7 @@ netParams.connParams['EM->ES'] = {
 
 netParams.connParams['EM->EM'] = {
     'preConds': {'pop': 'EM'}, 'postConds': {'pop': 'EM'},  # EM -> EM
-    'weight': 1.782,      
+    'weight': 5,
     'probability': 0.05625,              
     'delay': 5,
     'sec': 'soma',
@@ -239,7 +268,7 @@ netParams.connParams['EM->EM'] = {
 
 netParams.connParams['EM->IM'] = {
     'preConds': {'pop': 'EM'}, 'postConds': {'pop': 'IM'},  # EM -> IM
-    'weight': 1.15,      
+    'weight': 5,
     'probability': 0.48375,          
     'delay': 5,
     'sec': 'soma',
@@ -247,7 +276,7 @@ netParams.connParams['EM->IM'] = {
 
 netParams.connParams['EM->IML'] = {
     'preConds': {'pop': 'EM'}, 'postConds': {'pop': 'IML'},  # EM -> IML
-    'weight': 0.575,      
+    'weight': 5,
     'probability': 0.57375,              
     'delay': 5,
     'sec': 'soma',
@@ -255,7 +284,7 @@ netParams.connParams['EM->IML'] = {
 
 netParams.connParams['IM->EM'] = {
     'preConds': {'pop': 'IM'}, 'postConds': {'pop': 'EM'},  # IM -> EM
-    'weight': 9,      
+    'weight': 5,
     'probability': 0.495,              
     'delay': 5,
     'sec': 'soma',
@@ -263,7 +292,7 @@ netParams.connParams['IM->EM'] = {
 
 netParams.connParams['IM->IM'] = {
     'preConds': {'pop': 'IM'}, 'postConds': {'pop': 'IM'},  # IM -> IM
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.69750,              
     'delay': 5,
     'sec': 'soma',
@@ -271,7 +300,7 @@ netParams.connParams['IM->IM'] = {
 
 netParams.connParams['IM->IML'] = {
     'preConds': {'pop': 'IM'}, 'postConds': {'pop': 'IML'},  # IM -> IML
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.38250,              
     'delay': 5,
     'sec': 'soma',
@@ -279,7 +308,7 @@ netParams.connParams['IM->IML'] = {
 
 netParams.connParams['IML->EM'] = {
     'preConds': {'pop': 'IML'}, 'postConds': {'pop': 'EM'},  # IML -> EM
-    'weight': 2.49,      
+    'weight': 5,
     'probability': 0.39375,              
     'delay': 5,
     'sec': 'soma',
@@ -287,7 +316,7 @@ netParams.connParams['IML->EM'] = {
 
 netParams.connParams['IML->IM'] = {
     'preConds': {'pop': 'IML'}, 'postConds': {'pop': 'IM'},  # IML -> IM
-    'weight': 2.25,      
+    'weight': 5,
     'probability': 0.59625,              
     'delay': 5,
     'sec': 'soma',
@@ -295,7 +324,7 @@ netParams.connParams['IML->IM'] = {
 
 netParams.connParams['IML->IML'] = {
     'preConds': {'pop': 'IML'}, 'postConds': {'pop': 'IML'},  # IML -> IML
-    'weight': 4.5,      
+    'weight': 5,
     'probability': 0.10125,              
     'delay': 5,
     'sec': 'soma',
