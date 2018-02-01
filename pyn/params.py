@@ -157,6 +157,7 @@ netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
     'sec': 'soma'}
 
 
+
 netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'conds': {'pop': 'EB5'},  # Pstim_sh -> P_sh
     'weight': 4,
@@ -169,51 +170,59 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
 ###########################################
 # Background and stims
 #Plasticity Connections
+
+
 #[[s.ASC,s.ER2], [s.EB5,s.EDSC], [s.EB5,s.IDSC], [s.PMd,s.ER5], # spinal cord + pmd
 #        [s.ER2,s.ER5], [s.ER5,s.EB5], [s.ER2,s.EB5], [s.ER5,s.ER2]] # + L2-L5
 
 netParams.connParams['ER2->ER2'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER2'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 5,
+ 'weight': 0.66,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',   # probability of connection
  'synMech': 'AMPA',
  'sec': 'soma'}
 
 # Sensory
-netParams.connParams['Psh,P_el->ES'] = {
- 'preConds': {'pop': ['Psh', 'Pel']}, 'postConds': {'pop': 'ES'},  # P_sh,P_el -> ES
- 'weight': 5,
- 'probability': 0.1125,
- 'delay': 5,
+netParams.connParams['ER2->EB5'] = {
+ 'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'EB5'},  # P_sh,P_el -> ES
+ 'weight': 0.36,
+ 'probability': '25*1.6*exp(-dist_3D/probLengthConstExc)',
+ 'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
 
-netParams.connParams['ES->ES'] = {
- 'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'ES'},  # ES -> ES
- 'weight': 5,
- 'probability': 0.05625,
- 'delay': 5,
+netParams.connParams['ER2->ER5'] = {
+ 'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER5'},  # ES -> ES
+ 'weight': 0.93,
+ 'probability': '25*1.6*exp(-dist_3D/probLengthConstExc)',
+ 'delay': '2+dist_3D/propVelocity',
+ 'synMech': 'AMPA',
  'sec': 'soma',
- 'synMech': 'AMPA'}
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 
-netParams.connParams['ES->IS'] = {
- 'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'IS'},  # ES -> IS
- 'weight': 5,
- 'probability': 1.150,
- 'delay': 5,
- 'sec': 'soma',
- 'synMech': 'AMPA'}
+netParams.connParams['ER2->IL5'] = {
+ 'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
+ 'weight': 0.36,
+ 'probability': '25*0.51*exp(-dist_3D/probLengthConstExc)',
+ 'delay': '2+dist_3D/propVelocity',
+ 'synMech': 'AMPA',
+ 'sec': 'soma',}
 
-netParams.connParams['ES->ISL'] = {
- 'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'ISL'},  # ES -> ISL
- 'weight': 5,
- 'probability': 0.575,
- 'delay': 5,
- 'sec': 'soma',
- 'synMech': 'AMPA'}
+netParams.connParams['ER2->ER6'] = {
+ 'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
+ 'weight': 0,
+ 'probability': 0,
+ 'delay': '2+dist_3D/propVelocity',
+ 'synMech': 'AMPA',
+ 'sec': 'soma',}
+
+
+
+
+
 
 netParams.connParams['ES->EM'] = {
  'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'EM'},  # ES -> EM (plastic)
