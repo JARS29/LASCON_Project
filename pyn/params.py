@@ -18,7 +18,15 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 ###############################################################################
 
 #netParams.scaleConnWeight = 0.001 # Connection weight scale factor
-
+# General network parameters
+netParams.scale = 1 # Scale factor for number of cells
+# TODO could not find information about distances on the plane
+netParams.sizeX = 50 # x-dimension (horizontal length) size in um
+netParams.sizeZ = 50 # z-dimension (horizontal depth) size in um
+netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in um
+netParams.propVelocity = 100.0 # propagation velocity (um/ms)
+netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
+netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
 
 spkTimes = range(0,1000,20), range(0,1000,20)  # TODO report bug
 
@@ -28,29 +36,42 @@ pulses = [{'start': 10, 'end': 100, 'rate': 200, 'noise': 0.5},
 
 
 # Population parameters
-
-# TODO following line causes netpyne error on pop.py
-#netParams.scale = 8
-netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes, 'pulses': pulses, 'numCells': 96, 'ynormRange':[-1, -1]}
-netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'cellType': 'RTN', 'numCells': 64, 'ynormRange':[-1, -1]}
-netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 64, 'ynormRange':[-1, -1]}
-netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 64,'ynormRange':[-1, -1]}
+netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
+        'pulses': pulses, 'numCells': 96, 'ynormRange':[-1, -1]}
+# TODO ASC is nsloc
+netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'cellType': 'RTN',
+        'numCells': 64, 'ynormRange':[-1, -1]}
+netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 64, 'ynormRange':[-1, -1]}
+netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 64,'ynormRange':[-1, -1]}
 ## L2/3 Cells
-netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 150, 'ynormRange':[0.1, 0.31]}
-netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 25,  'ynormRange':[0.1, 0.31]}
-netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 25, 'ynormRange':[0.1, 0.31]}
+netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 150, 'ynormRange':[0.1, 0.31]}
+netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 25,  'ynormRange':[0.1, 0.31]}
+netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 25, 'ynormRange':[0.1, 0.31]}
 ## L5A Cells
-netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 168, 'ynormRange':[0.31, 0.52]}
-netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40, 'ynormRange':[0.31, 0.77]}
-netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 40, 'ynormRange':[0.31, 0.77]}
+netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 168, 'ynormRange':[0.31, 0.52]}
+netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 40, 'ynormRange':[0.31, 0.77]}
+netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 40, 'ynormRange':[0.31, 0.77]}
 ## L5B Cells
-netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 72, 'ynormRange':[0.52, 0.77]}
+netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 72, 'ynormRange':[0.52, 0.77]}
 ## L6 Cells
-netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 192, 'ynormRange':[0.77, 1.00]}
-netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 32, 'ynormRange':[0.77, 1.00]}
-netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR', 'numCells': 32, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 192, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 32, 'ynormRange':[0.77, 1.00]}
+netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        'numCells': 32, 'ynormRange':[0.77, 1.00]}
 # TODO This one just to avoid error
-netParams.popParams['EM'] = {'cellModel': 'Izhi', 'cellType': 'RS', 'numCells': 80} # add dict with params for this pop 
+netParams.popParams['EM'] = {'cellModel': 'Izhi', 'cellType': 'RS',
+        'numCells': 80} # add dict with params for this pop 
 
 #netParams.popParams['artif3'] = {'cellModel': 'VecStim', 'numCells': 50, 'spkTimes': spkTimes, 'pulses': pulses}
 
@@ -88,11 +109,9 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that 
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
 
-
-## TODO error, no nslocCell
-#cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
-# 	fileName='nsloc.py', cellName='nslocCell')
-#netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
+cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
+ 	fileName='nsloc.py', cellName='nslocCell')
+netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 
 
 
@@ -114,11 +133,6 @@ netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 10
 
 STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 0, 'verbose':0}
-
-# Background and stims
-#Plasticity Connections
-#[[s.ASC,s.ER2], [s.EB5,s.EDSC], [s.EB5,s.IDSC], [s.PMd,s.ER5], # spinal cord + pmd
-#        [s.ER2,s.ER5], [s.ER5,s.EB5], [s.ER2,s.EB5], [s.ER5,s.ER2]] # + L2-L5
 
 netParams.stimTargetParams['bgS->ER2,ER5,ER6'] = {'source': 'backgroundS',
     'conds': {'pop': ['ER2', 'ER5','ER6']}, # background -> Exc
@@ -153,6 +167,19 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
 ###########################################
 # CONNECTION PARAMETERS
 ###########################################
+# Background and stims
+#Plasticity Connections
+#[[s.ASC,s.ER2], [s.EB5,s.EDSC], [s.EB5,s.IDSC], [s.PMd,s.ER5], # spinal cord + pmd
+#        [s.ER2,s.ER5], [s.ER5,s.EB5], [s.ER2,s.EB5], [s.ER5,s.ER2]] # + L2-L5
+
+netParams.connParams['ER2->ER2'] = {
+ 'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER2'}, 
+ 'delay': '2+dist_3D/propVelocity',
+ 'weight': 5,
+ 'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',   # probability of connection
+ 'synMech': 'AMPA',
+ 'sec': 'soma'}
+
 # Sensory
 netParams.connParams['Psh,P_el->ES'] = {
  'preConds': {'pop': ['Psh', 'Pel']}, 'postConds': {'pop': 'ES'},  # P_sh,P_el -> ES
@@ -347,7 +374,7 @@ simConfig.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (conn
 simConfig.createNEURONObj = True  # create HOC objects when instantiating network
 simConfig.createPyStruct = True  # create Python structure (simulator-independent) when instantiating network
 simConfig.timing = True  # show timing  and save to file
-simConfig.verbose = True # show detailed messages 
+simConfig.verbose = False # show detailed messages 
 
 # Recording 
 simConfig.recordCells = ['all']  # list of cells to record from 
