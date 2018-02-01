@@ -168,13 +168,6 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
 ###########################################
 # CONNECTION PARAMETERS
 ###########################################
-# Background and stims
-#Plasticity Connections
-
-
-#[[s.ASC,s.ER2], [s.EB5,s.EDSC], [s.EB5,s.IDSC], [s.PMd,s.ER5], # spinal cord + pmd
-#        [s.ER2,s.ER5], [s.ER5,s.EB5], [s.ER2,s.EB5], [s.ER5,s.ER2]] # + L2-L5
-
 netParams.connParams['ER2->ER2'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER2'}, 
  'delay': '2+dist_3D/propVelocity',
@@ -292,7 +285,8 @@ netParams.connParams['ER5->ER2'] = {
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 netParams.connParams['ER5->EB5'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'EB5'},  # ES -> ES
@@ -300,7 +294,8 @@ netParams.connParams['ER5->EB5'] = {
  'probability': '25*0.84*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 
 netParams.connParams['ER5->ER5'] = {
@@ -410,8 +405,9 @@ netParams.connParams['IL2->IF2'] = {
  'synMech': 'GABAB',
  'sec': 'soma'}
 
-
+####################################
 ############ temporary (from example)
+####################################
 netParams.connParams['ES->EM'] = {
  'preConds': {'pop': 'ES'}, 'postConds': {'pop': 'EM'},  # ES -> EM (plastic)
  'weight': 5,
@@ -695,7 +691,8 @@ netParams.connParams['ASC->ER2'] = {
  'weight': 1.0,
  'probability': '25*.6*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 netParams.connParams['EB5->EDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'EDSC'}, 
@@ -703,7 +700,8 @@ netParams.connParams['EB5->EDSC'] = {
  'weight': 2.0,
  'probability': '25*1.0*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 netParams.connParams['EB5->IDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IDSC'}, 
@@ -711,7 +709,8 @@ netParams.connParams['EB5->IDSC'] = {
  'weight': 0.5,
  'probability': 0,
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 netParams.connParams['IDSC->EDSC'] = {
  'preConds': {'pop': 'IDSC'}, 'postConds': {'pop': 'EDSC'}, 
@@ -727,7 +726,8 @@ netParams.connParams['PMd->ER5'] = {
  'weight': 2.0,
  'probability': '25*2.0*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
- 'sec': 'soma'}
+ 'sec': 'soma',
+ 'plast': {'mech': 'STDP', 'params': STDPparams}}
 
 ###############################################################################
 # SIMULATION PARAMETERS
