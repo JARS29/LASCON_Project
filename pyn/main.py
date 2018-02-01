@@ -35,8 +35,8 @@ sim.targetDist = 0.15 # target distance from center (15 cm)
 
 # Propriocpetive encoding
 allCellTags = sim._gatherAllCellTags()
-sim.pop_sh = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'Psh']
-sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'Pel']
+sim.pop_sh = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC' or tags['pop'] == 'IDSC']
+sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EB5']
 sim.minPval = radians(-30) 
 sim.maxPval = radians(135)
 sim.minPrate = 0.01
@@ -44,7 +44,7 @@ sim.maxPrate = 100
 
 # Motor encoding
 sim.nMuscles = 4 # number of muscles
-motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EM']
+motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ER2']
 cellsPerMuscle = len(motorGids) / sim.nMuscles
 sim.motorCmdCellRange = [motorGids[i:i+cellsPerMuscle] for i in xrange(0, len(motorGids), cellsPerMuscle)]  # cell gids of motor output to each muscle
 sim.cmdmaxrate = 120  # value to normalize motor command num spikes
@@ -159,6 +159,7 @@ sim.runSimWithIntervalFunc(sim.updateInterval, runArm)        # run parallel Neu
 sim.gatherData()                  # gather spiking data and cell info from each node
 sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
 sim.analysis.plotData()               # plot spike raster
+
 sim.arm.close(sim)
 
 if sim.plotWeights:
