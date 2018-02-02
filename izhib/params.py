@@ -42,58 +42,56 @@ netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
 # TODO ASC is nsloc
 netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
         'numCells': 64}
-# TODO all PYR? because then following rules seem to erase previous ones
-netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+
+netParams.popParams['EDSC'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 64}
-netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IDSC'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 64}
 ## L2/3 Cells
-netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['ER2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 150}
-netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IF2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 25}
-netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IL2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 25}
 ## L5A Cells
-netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['ER5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 168}
-netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IL5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 40}
-netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IF5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 40}
 ## L5B Cells
-netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['EB5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 72}
 ## L6 Cells
-netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['ER6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 192}
-netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IF6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 32}
-netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IL6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
         'numCells': 32}
 
 ###############################################################################
 # CELL PARAMETERS
 ###############################################################################
 
-# RS Izhi cell params
-cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
-	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS', 'host':'dummy'})
-netParams.renameCellParamsSec('RS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+############ Izhi2007b (uses a section voltage)
+## RS Izhi cell params
+netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
+                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS'})
 ## LTS Izhi cell params
-cellRule = netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
-	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS', 'host':'dummy'})
-netParams.renameCellParamsSec('LTS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
+                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS'})
 ## FS Izhi cell params
-cellRule = netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
-	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS', 'host':'dummy'})
-netParams.renameCellParamsSec('FS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
-cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
+                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS'})
+# Synaptic mechanism parameters
+netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.05, 'tau2': 5.3, 'e': 0} # AMPA
+netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 0.15, 'tau2': 1.50, 'e': 0} # NMDA
+netParams.synMechParams['GABAA'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
+# TODO the same as gabaa?
+netParams.synMechParams['GABAB'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
 
 cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
  	fileName='nsloc.py', cellName='nslocCell')
