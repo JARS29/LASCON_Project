@@ -43,33 +43,33 @@ netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
 netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
         'numCells': 64}
 
-netParams.popParams['EDSC'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['EDSC'] = {'cellModel': 'Izhi', 'cellType': 'RS',
         'numCells': 64}
-netParams.popParams['IDSC'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IDSC'] = {'cellModel': 'Izhi', 'cellType': 'LTS',
         'numCells': 64}
 ## L2/3 Cells
-netParams.popParams['ER2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['ER2'] = {'cellModel': 'Izhi', 'cellType': 'RS',
         'numCells': 150}
-netParams.popParams['IF2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IF2'] = {'cellModel': 'Izhi', 'cellType': 'FS',
         'numCells': 25}
-netParams.popParams['IL2'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IL2'] = {'cellModel': 'Izhi', 'cellType': 'LTS',
         'numCells': 25}
 ## L5A Cells
-netParams.popParams['ER5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['ER5'] = {'cellModel': 'Izhi', 'cellType': 'RS',
         'numCells': 168}
-netParams.popParams['IL5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IL5'] = {'cellModel': 'Izhi', 'cellType': 'LTS',
         'numCells': 40}
-netParams.popParams['IF5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IF5'] = {'cellModel': 'Izhi', 'cellType': 'FS',
         'numCells': 40}
 ## L5B Cells
-netParams.popParams['EB5'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['EB5'] = {'cellModel': 'Izhi', 'cellType': 'RS',
         'numCells': 72}
 ## L6 Cells
-netParams.popParams['ER6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['ER6'] = {'cellModel': 'Izhi', 'cellType': 'RS',
         'numCells': 192}
-netParams.popParams['IF6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IF6'] = {'cellModel': 'Izhi', 'cellType': 'FS',
         'numCells': 32}
-netParams.popParams['IL6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
+netParams.popParams['IL6'] = {'cellModel': 'Izhi', 'cellType': 'LTS',
         'numCells': 32}
 
 ###############################################################################
@@ -78,14 +78,39 @@ netParams.popParams['IL6'] = {'cellModel': 'Izh2007b', 'cellType': 'PYR',
 
 ############ Izhi2007b (uses a section voltage)
 ## RS Izhi cell params
-netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
-                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS'})
+
+izhiParams = {}
+izhiParams['RS'] = {'mod':'Izhi2007b', 'C':1, 'k':0.7, 'vr':-60, 'vt':-40, 'vpeak':35, 'a':0.03, 'b':-2, 'c':-50, 'd':100, 'celltype':1}
+izhiParams['LTS'] = {'mod':'Izhi2007b', 'C':1, 'k':1.0, 'vr':-56, 'vt':-42, 'vpeak':40, 'a':0.03, 'b':8, 'c':-53, 'd':20, 'celltype':4}
+izhiParams['FS'] = {'mod':'Izhi2007b', 'C':0.2, 'k':1.0, 'vr':-55, 'vt':-40, 'vpeak':25, 'a':0.2, 'b':-2, 'c':-45, 'd':-55, 'celltype':5}
+
+
+## RS Izhi cell params
+cellRule = {'conds': {'cellType': 'RS', 'cellModel': 'Izhi'}, 'secs': {}}
+cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
+cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
+cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['RS']
+netParams.cellParams['RS_Izhi'] = cellRule  # add dict to list of cell properties
+
+
 ## LTS Izhi cell params
-netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
-                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS'})
+cellRule = {'conds': {'cellType': 'LTS', 'cellModel': 'Izhi'}, 'secs': {}}
+cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
+cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
+cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['LTS']
+netParams.cellParams['LTS_Izhi'] = cellRule  # add dict to list of cell properties
+
+
 ## FS Izhi cell params
-netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izhi2007b'},
-                fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS'})
+cellRule = {'conds': {'cellType': 'FS', 'cellModel': 'Izhi'}, 'secs': {}}
+cellRule['secs']['soma'] = {'geom': {}, 'pointps':{}}  #  soma
+cellRule['secs']['soma']['geom'] = {'diam': 10, 'L': 10, 'cm': 31.831}
+cellRule['secs']['soma']['pointps']['Izhi'] = izhiParams['FS']
+netParams.cellParams['FS_Izhi'] = cellRule  # add dict to list of cell properties
+
+
+
+
 # Synaptic mechanism parameters
 netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.05, 'tau2': 5.3, 'e': 0} # AMPA
 netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 0.15, 'tau2': 1.50, 'e': 0} # NMDA
@@ -93,9 +118,6 @@ netParams.synMechParams['GABAA'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1,
 # TODO the same as gabaa?
 netParams.synMechParams['GABAB'] = {'mod': 'Exp2Syn', 'tau1': 0.07, 'tau2': 9.1, 'e': -80} # GABAA
 
-cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
- 	fileName='nsloc.py', cellName='nslocCell')
-netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 
 ###########################################
 # STIMULATION PARAMETERS
