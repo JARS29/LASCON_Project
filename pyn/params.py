@@ -9,6 +9,19 @@ Contributors: salvadordura@gmail.com
 """
 
 from netpyne import specs
+from neuron import h # Import NEURON
+
+
+
+## MPI
+pc = h.ParallelContext() # MPI: Initialize the ParallelContext class
+nhosts = int(pc.nhost()) # Find number of hosts
+rank = int(pc.id())     # rank 0 will be the master
+
+if rank==0:
+    pc.gid_clear()
+    print('\nSetting parameters...')
+
 
 netParams = specs.NetParams()   # object of class NetParams to store the network parameters
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
@@ -28,7 +41,7 @@ netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
 
-spkTimes = range(0,1000,20), range(0,1000,20)  # TODO report bug
+spkTimes = range(0,1000,20)  # TODO report bug
 
 # create list of pulses (each item is a dict with pulse params)
 pulses = [{'start': 10, 'end': 100, 'rate': 200, 'noise': 0.5},
@@ -41,7 +54,7 @@ netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
         'pulses': pulses, 'numCells': 96}
 # TODO ASC is nsloc
 netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
-        'numCells': 64}
+        'pulses': pulses, 'numCells': 64}
 # TODO all PYR? because then following rules seem to erase previous ones
 netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
         'numCells': 64}
@@ -74,7 +87,7 @@ netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
 
 ###############################################################################
 # CELL PARAMETERS
-###############################################################################
+######################   #########################################################
 
 # RS Izhi cell params
 cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},

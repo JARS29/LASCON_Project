@@ -348,24 +348,24 @@ class Arm:
         for cell in [c for c in f.net.cells if c.gid in f.pop_sh]:   # shoulder
             if (self.ang[SH] >= cell.prange[0] and self.ang[SH] < cell.prange[1]):  # in angle in range -> high firing rate
                 for stim in cell.stims:
-                    if stim['source'] == 'backgroundDSC':
+                    if stim['source'] == 'backgroundEB5':
                         stim['hNetStim'].interval = 1000/self.maxPrate # interval in ms as a function of rate
                         break
             else: # if angle not in range -> low firing rate
                 for stim in cell.stims:
-                    if stim['source'] == 'backgroundDSC':
+                    if stim['source'] == 'backgroundEB5':
                         stim['hNetStim'].interval = 1000.0/self.minPrate # interval in ms as a function of rate
                         break
 
         for cell in [c for c in f.net.cells if c.gid in f.pop_el]:   # elbow
             if (self.ang[EL] >= cell.prange[0] and self.ang[EL] < cell.prange[1]):  # in angle in range -> high firing rate
                 for stim in cell.stims:
-                    if stim['source'] == 'backgroundEB5':
+                    if stim['source'] == 'backgroundDSC':
                         stim['hNetStim'].interval = 1000.0/self.maxPrate # interval in ms as a function of rate
                         break
             else: # if angle not in range -> low firing rate
                 for stim in cell.stims:
-                    if stim['source'] == 'backgroundEB5':
+                    if stim['source'] == 'backgroundDSC':
                         stim['hNetStim'].interval = 1000.0/self.minPrate # interval in ms as a function of rate
                         break
 

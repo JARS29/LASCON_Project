@@ -36,7 +36,7 @@ sim.targetDist = 0.15 # target distance from center (15 cm)
 # Propriocpetive encoding
 allCellTags = sim._gatherAllCellTags()
 sim.pop_sh = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC' or tags['pop'] == 'IDSC']
-sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EB5']
+sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ER2']
 sim.minPval = radians(-30) 
 sim.maxPval = radians(135)
 sim.minPrate = 0.01
@@ -73,7 +73,7 @@ sim.trialReset = True # whether to reset the arm after every trial time
 sim.timeoflastreset = 0 # time when arm was last reseted
 
 # train/test params
-sim.trainTime = 1 * 1e3
+sim.trainTime = 2 * 1e3
 sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
@@ -157,11 +157,20 @@ def plotWeights():
 
 sim.runSimWithIntervalFunc(sim.updateInterval, runArm)        # run parallel Neuron simulation  
 sim.gatherData()                  # gather spiking data and cell info from each node
-sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
+#sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
 sim.analysis.plotData()               # plot spike raster
+
+sim.analysis.plotRaster(include=['ASC','EDSC', 'IDSC', 'ER2'],
+                        orderBy='y', orderInverse=True, spikeHist='overlay',
+                        spikeHistBin=5)
+
+#sim.analysis.plotSpikeStats( include = ['ASC', 'ER2'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8), showFig = True)
+#sim.analysis.plotSpikeStats( include = ['ER2', 'IDSC','EDSC'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8),  showFig = True)
+
 
 sim.arm.close(sim)
 
+
 if sim.plotWeights:
-    saveWeights(sim) 
+    saveWeights(sim)
     plotWeights() 
