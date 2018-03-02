@@ -10,7 +10,9 @@ Contributors: salvadordura@gmail.com
 
 from netpyne import specs
 from neuron import h # Import NEURON
-
+from scipy.io import loadmat
+import itertools
+import numpy as np
 
 
 ## MPI
@@ -25,6 +27,8 @@ if rank==0:
 
 netParams = specs.NetParams()   # object of class NetParams to store the network parameters
 simConfig = specs.SimConfig()   # object of class SimConfig to store the simulation configuration
+
+
 
 ###############################################################################
 # POPULATION PARAMETERS
@@ -41,20 +45,32 @@ netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
 
-spkTimes = range(0,1000,20)  # TODO report bug
 
-# create list of pulses (each item is a dict with pulse params)
-pulses = [{'start': 10, 'end': 100, 'rate': 200, 'noise': 0.5},
-         {'start': 400, 'end': 500, 'rate': 1, 'noise': 0.0}]
+
+spkASC= [0]*64
+
+# Including Spikes data
+spikesPMdFile = 'pmdData.mat'
+rawSpikesPMd = loadmat(spikesPMdFile)['pmdData']  # load raw data
+spkTimes = []
+
+for i in range(len(rawSpikesPMd[0][0])):
+	for j in range(len(rawSpikesPMd[0])):
+		temp=list(itertools.chain(*rawSpikesPMd[0][j][i]))
+		spkTimes.append(list(itertools.chain(*temp)))
+
+##
+
+
 
 
 # Population parameters
 # TODO what to do with this?
 netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
-        'pulses': pulses, 'numCells': 96}
+        'numCells': 96}
 # TODO ASC is nsloc
-netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
-        'pulses': pulses, 'numCells': 64}
+netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkASC,
+       'numCells': 64}
 # TODO all PYR? because then following rules seem to erase previous ones
 netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
         'numCells': 64}
@@ -85,6 +101,8 @@ netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
 netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
         'numCells': 32}
 
+
+
 ###############################################################################
 # CELL PARAMETERS
 ######################   #########################################################
@@ -108,9 +126,6 @@ netParams.renameCellParamsSec('FS_Izhi', 'sec', 'soma')  # rename imported secti
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
-cellRule = netParams.importCellParams(label='PMd_loc', conds={'cellModel':'VecStim'},
- 	fileName='nsloc.py', cellName='nslocCell')
-netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 
 ###########################################
 # STIMULATION PARAMETERS
@@ -119,7 +134,9 @@ netParams.renameCellParamsSec('PMd', 'sec', 'soma')  # rename imported section '
 netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'rate': 100, 'noise': 1}
 netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3}
 netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'rate': 'variable', 'noise': 1}
-netParams.stimSourceParams['stimER2'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs)
+netParams.stimSourceParams['stimEDSC'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs)
+netParams.stimSourceParams['stimASC'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for ASC
+
 
 STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
     'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 0, 'verbose':0}
@@ -155,12 +172,18 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'synMech': 'NMDA',
     'sec': 'soma'}
 
-netParams.stimTargetParams['stimER2->ER2'] = {'source': 'stimER2',
-    'conds': {'pop': 'ER2'}, # EMstim-> EM
+netParams.stimTargetParams['stimEDSC->EDSC'] = {'source': 'stimEDSC',
+    'conds': {'pop': 'EDSC'}, # EMstim-> EM
     'weight': 0.4,
     'delay': 'uniform(1,5)',
     'synMech': 'NMDA'}
-
+    
+#netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
+ #   'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
+  #  'weight': 0.1,                   
+   # 'delay': 1,     
+    #'synMech': 'NMDA'} 
+    
 ###########################################
 # CONNECTION PARAMETERS
 ###########################################
@@ -567,8 +590,8 @@ netParams.connParams['IDSC->EDSC'] = {
 netParams.connParams['PMd->ER5'] = {
  'preConds': {'pop': 'PMd'}, 'postConds': {'pop': 'ER5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.0,
- 'probability': '25*2.0*exp(-dist_3D/probLengthConstExc)',
+ 'weight': 1.0,
+ 'probability': 2.4,
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
@@ -611,6 +634,6 @@ simConfig.saveDpk = False # save to a .dpk pickled file
 
 
 # Analysis and plotting
-simConfig.analysis['plotRaster'] = True # Whether or not to plot a raster
+#simConfig.analysis['plotRaster'] = True # Whether or not to plot a raster
 
 

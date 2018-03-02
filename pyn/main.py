@@ -18,7 +18,6 @@ sim.net.connectCells()                # create connections between cells based o
 sim.net.addStims()
 sim.setupRecording()              # setup variables to record for each cell (spikes, V traces, etc)
 
-
 ###############################################################################
 # Set up virtual arm, proprioceptive/motor encoding and RL
 ###############################################################################
@@ -35,8 +34,8 @@ sim.targetDist = 0.15 # target distance from center (15 cm)
 
 # Propriocpetive encoding
 allCellTags = sim._gatherAllCellTags()
-sim.pop_sh = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC' or tags['pop'] == 'IDSC']
-sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ER2']
+sim.pop_sh = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ASC']
+sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ASC']
 sim.minPval = radians(-30) 
 sim.maxPval = radians(135)
 sim.minPrate = 0.01
@@ -44,7 +43,7 @@ sim.maxPrate = 100
 
 # Motor encoding
 sim.nMuscles = 4 # number of muscles
-motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ER2']
+motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC']
 cellsPerMuscle = len(motorGids) / sim.nMuscles
 sim.motorCmdCellRange = [motorGids[i:i+cellsPerMuscle] for i in xrange(0, len(motorGids), cellsPerMuscle)]  # cell gids of motor output to each muscle
 sim.cmdmaxrate = 120  # value to normalize motor command num spikes
@@ -73,14 +72,19 @@ sim.trialReset = True # whether to reset the arm after every trial time
 sim.timeoflastreset = 0 # time when arm was last reseted
 
 # train/test params
-sim.trainTime = 2 * 1e3
+sim.trainTime = 1 * 1e3
 sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
 sim.numTargets = 1
 sim.targetid = 3 # target to train+test
 #rint sim.targetid
-sim.trialTargets = [3,3,3]#*sim.numTrials #[i%sim.numTargets for i in range(int(sim.numTrials+1))] # set target for each trial
+sim.trialTargets = [3,3,3] #[i % sim.numTargets for i in range(int(sim.numTrials+1))]
+
+# set target for each trial [3,3,3]
+
+
+
 
 # create Arm class and setup
 if sim.useArm:
@@ -114,6 +118,7 @@ def runArm(t):
                     STDPmech = conn.get('hSTDP')  # check if has STDP mechanism
                     if STDPmech:   # run stdp.mod method to update syn weights based on RLprint cell.gid
                         STDPmech.reward_punish(float(critic))
+                        #print conn
 
         # store weight changes
         sim.allWeights.append([]) # Save this time
@@ -159,10 +164,13 @@ sim.runSimWithIntervalFunc(sim.updateInterval, runArm)        # run parallel Neu
 sim.gatherData()                  # gather spiking data and cell info from each node
 #sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
 sim.analysis.plotData()               # plot spike raster
+#sim.gatherData()
 
-sim.analysis.plotRaster(include=['ASC','EDSC', 'IDSC', 'ER2'],
-                        orderBy='y', orderInverse=True, spikeHist='overlay',
-                        spikeHistBin=5)
+#sim.analysis.plotRaster(include=['PMd', 'EDSC', 'IDSC', 'ER2', 'ASC'], timeRange=[200,900])
+
+#sim.analysis.plotRaster(include=['ASC','EDSC', 'IDSC', 'ER2'],
+                        #orderBy='y', orderInverse=True, spikeHist='overlay',
+                        #spikeHistBin=5)
 
 #sim.analysis.plotSpikeStats( include = ['ASC', 'ER2'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8), showFig = True)
 #sim.analysis.plotSpikeStats( include = ['ER2', 'IDSC','EDSC'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8),  showFig = True)
@@ -172,5 +180,5 @@ sim.arm.close(sim)
 
 
 if sim.plotWeights:
-    saveWeights(sim)
-    plotWeights() 
+     saveWeights(sim)
+     plotWeights()
