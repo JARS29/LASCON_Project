@@ -260,6 +260,7 @@ corticalthick = 1740
 
 
 ## STDP and RL parameters
+prin = []
 usestdp = True # Whether or not to use STDP
 useRL = True #True # Where or not to use RL
 plastConnsType = 5 # predefined sets of plastic connections (use with evol alg)

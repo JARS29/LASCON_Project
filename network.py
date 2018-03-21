@@ -462,6 +462,7 @@ def createNetwork():
     connstart = time() # See how long connecting the cells takes
     s.connlist = [] # Create array for storing each of the connections
     s.stdpconndata = [] # Store data on STDP connections
+    
     if s.usestdp: # STDP enabled?
         s.stdpmechs = [] # Initialize array for STDP mechanisms
         s.precons = [] # Initialize array for presynaptic spike counters
@@ -489,6 +490,7 @@ def createNetwork():
                         s.precons.append(precon) # Save presynaptic spike source
                         s.pstcons.append(pstcon) # Save postsynaptic spike source
                         s.stdpconndata.append([pregid,pstgid,r]) # Store presynaptic cell ID, postsynaptic, and receptor
+                        s.prin.append([stdpmech.hebbwt, stdpmech.antiwt, stdpmech.wmax])
                         if s.verbose: stdpmech.verbose = 1
                         if s.useRL: # using RL
                             stdpmech.RLon = 1 # make sure RL is on

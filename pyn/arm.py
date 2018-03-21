@@ -280,12 +280,12 @@ class Arm:
             for cell in [c for c in f.net.cells if c.gid in [gid for sublist in f.motorCmdCellRange for gid in sublist]]:
                 if cell.gid in self.targetCells:  # for each rand cell selected
                     for stim in cell.stims:
-                        if stim['source'] == 'stimEDSC':
+                        if stim['source'] == 'backgroundDSC':
                             stim['hNetStim'].interval = 1000/self.randRate
                             break
                 else: # if not stimulated
                     for stim in cell.stims:
-                        if stim['source'] == 'stimEDSC':
+                        if stim['source'] == 'backgroundDSC':
                             stim['hNetStim'].interval = 1000.0 / self.origMotorBackgroundRate # interval in ms as a function of rate
                             break
             f.timeoflastexplor = t

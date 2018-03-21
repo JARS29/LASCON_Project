@@ -46,9 +46,6 @@ netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
 
 
-
-spkASC= [0]*64
-
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
 rawSpikesPMd = loadmat(spikesPMdFile)['pmdData']  # load raw data
@@ -65,41 +62,49 @@ for i in range(len(rawSpikesPMd[0][0])):
 
 
 # Population parameters
-# TODO what to do with this?
+
+# dorsal Premotor Cortex
 netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
         'numCells': 96}
-# TODO ASC is nsloc
-netParams.popParams['ASC'] = {'cellModel': 'VecStim', 'spkTimes': spkASC,
-       'numCells': 64}
-# TODO all PYR? because then following rules seem to erase previous ones
-netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+        
+#Ascending Spinal Cord
+netParams.popParams['ASC'] = {'cellModel': 'Nsloc', 'numCells': 64}
+
+#Descending Spinal Cord
+netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
         'numCells': 64}
-netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
+netParams.popParams['IDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'LTS',
         'numCells': 64}
+        
 ## L2/3 Cells
-netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 150}
-netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 25}
-netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 25}
+netParams.popParams['ER2'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
+        'numCells': 150, 'ynormRange' : [0.1,0.31]}
+netParams.popParams['IF2'] = {'cellModel': 'Izh2007a', 'cellType': 'FS',
+        'numCells': 25, 'ynormRange' : [0.1,0.31]}
+netParams.popParams['IL2'] = {'cellModel': 'Izh2007a', 'cellType': 'LTS',
+        'numCells': 25, 'ynormRange' : [0.1,0.31]}
+        
 ## L5A Cells
-netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 168}
-netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 40}
-netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 40}
+netParams.popParams['ER5'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
+        'numCells': 168, 'ynormRange' : [0.31,0.52]}
+netParams.popParams['IL5'] = {'cellModel': 'Izh2007a', 'cellType': 'LTS',
+        'numCells': 40, 'ynormRange' : [0.31,0.77]}
+netParams.popParams['IF5'] = {'cellModel': 'Izh2007a', 'cellType': 'FS',
+        'numCells': 40, 'ynormRange' : [0.31,0.77]}
+        
 ## L5B Cells
-netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 72}
+netParams.popParams['EB5'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
+        'numCells': 72, 'ynormRange' : [0.52,0.77]}
+        
 ## L6 Cells
-netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 192}
-netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 32}
-netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
-        'numCells': 32}
+netParams.popParams['ER6'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
+        'numCells': 192, 'ynormRange': [0.77,1.0]}
+        
+netParams.popParams['IF6'] = {'cellModel': 'Izh2007a', 'cellType': 'FS',
+        'numCells': 32, 'ynormRange' : [0.77,1.0]}
+        
+netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'LTS',
+        'numCells': 32, 'ynormRange' : [0.77,1.0]}
 
 
 
@@ -107,55 +112,63 @@ netParams.popParams['IL6'] = {'cellModel': 'Izh2007a', 'cellType': 'PYR',
 # CELL PARAMETERS
 ######################   #########################################################
 
+
 # RS Izhi cell params
-cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
+cellRule = netParams.importCellParams(label='RS_Izhi', conds={'cellType': 'RS', 'cellModel':'Izh2007a'},
 	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'RS', 'host':'dummy'})
 netParams.renameCellParamsSec('RS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
+
 ## LTS Izhi cell params
-cellRule = netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
+cellRule = netParams.importCellParams(label='LTS_Izhi', conds={'cellType': 'LTS', 'cellModel':'Izh2007a'},
 	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'LTS', 'host':'dummy'})
 netParams.renameCellParamsSec('LTS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 ## FS Izhi cell params
-cellRule = netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'PYR', 'cellModel':'Izh2007a'},
+cellRule = netParams.importCellParams(label='FS_Izhi', conds={'cellType': 'FS', 'cellModel':'Izh2007a'},
 	fileName='izhi2007Wrapper.py', cellName='IzhiCell',  cellArgs={'type':'FS', 'host':'dummy'})
 netParams.renameCellParamsSec('FS_Izhi', 'sec', 'soma')  # rename imported section 'sec' to 'soma'
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
+#NSLOC
+cellRule = netParams.importCellParams(label='ASC_nsloc', conds={'cellModel':'Nsloc'},
+ 	fileName='nslocASC.py', cellName='nslocCell')
+netParams.renameCellParamsSec('ASC', 'sec', 'soma')
 
 ###########################################
 # STIMULATION PARAMETERS
 ###########################################
 # background inputs
-netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'rate': 100, 'noise': 1}
-netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3}
-netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'rate': 'variable', 'noise': 1}
-netParams.stimSourceParams['stimEDSC'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for EM (explor movs)
+#TODO EB5 represents EM (explor movs) ? 
+netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'noise': 1, 'number': 1e10 }
+netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3, 'number': 1e10}
+netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
 netParams.stimSourceParams['stimASC'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for ASC
 
 
-STDPparams = {'hebbwt': 0.00001, 'antiwt':-0.00001, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.001, 'RLantiwt': -0.000, \
-    'tauhebb': 10, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 0, 'verbose':0}
+STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.025, 'RLantiwt': -0.025, \
+    'tauhebb': 48.5, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 1, 'verbose':0}
+
+
 
 netParams.stimTargetParams['bgS->ER2,ER5,ER6'] = {'source': 'backgroundS',
-    'conds': {'pop': ['ER2', 'ER5','ER6']}, # background -> Exc
+    'conds': {'pop': ['ER2', 'ER5','ER6']}, # background -> Exi
     'weight': 2,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
 netParams.stimTargetParams['bgS->IF2,IL2,IF5,IL5,IF6,IL6'] = {'source': 'backgroundS',
-    'conds': {'pop': ['IF2', 'IL2','IF5','IL5','IF6', 'IL6']}, # background -> Exc
-    'weight': 2,
+    'conds': {'pop': ['IF2', 'IL2','IF5','IL5','IF6', 'IL6']}, # background -> Inh
+    'weight': -2,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
-
+##
 netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
     'conds': {'pop': ['EDSC', 'IDSC']},  # Pstim_sh -> P_sh
     'weight': 4,
@@ -172,17 +185,12 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'synMech': 'NMDA',
     'sec': 'soma'}
 
-netParams.stimTargetParams['stimEDSC->EDSC'] = {'source': 'stimEDSC',
-    'conds': {'pop': 'EDSC'}, # EMstim-> EM
-    'weight': 0.4,
-    'delay': 'uniform(1,5)',
-    'synMech': 'NMDA'}
+netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
+    'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
+    'weight': 0.1,                   
+    'delay': 1,     
+    'synMech': 'NMDA'} 
     
-#netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
- #   'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
-  #  'weight': 0.1,                   
-   # 'delay': 1,     
-    #'synMech': 'NMDA'} 
     
 ###########################################
 # CONNECTION PARAMETERS
@@ -590,8 +598,8 @@ netParams.connParams['IDSC->EDSC'] = {
 netParams.connParams['PMd->ER5'] = {
  'preConds': {'pop': 'PMd'}, 'postConds': {'pop': 'ER5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.0,
- 'probability': 2.4,
+ 'weight': 2.0,
+ 'probability': 2.0,
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
@@ -634,6 +642,6 @@ simConfig.saveDpk = False # save to a .dpk pickled file
 
 
 # Analysis and plotting
-#simConfig.analysis['plotRaster'] = True # Whether or not to plot a raster
+simConfig.analysis['plotRaster'] = True # Whether or not to plot a raster
 
 
