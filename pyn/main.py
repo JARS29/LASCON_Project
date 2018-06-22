@@ -180,5 +180,5 @@ sim.arm.close(sim)
 
 
 if sim.plotWeights:
-     saveWeights(sim)
+#     saveWeights(sim)
      plotWeights()

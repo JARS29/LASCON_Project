@@ -44,8 +44,9 @@ netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
-
-
+netParams.scaleConnWeight = 0.750
+netParams.scaleConnWeightNetStims= 0.750
+sca = 1
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
 rawSpikesPMd = loadmat(spikesPMdFile)['pmdData']  # load raw data
@@ -134,7 +135,7 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that 
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
 #NSLOC
-cellRule = netParams.importCellParams(label='ASC_nsloc', conds={'cellModel':'Nsloc'},
+cellRule = netParams.importCellParams(label='nsloc', conds={'cellModel':'Nsloc'},
  	fileName='nslocASC.py', cellName='nslocCell')
 netParams.renameCellParamsSec('ASC', 'sec', 'soma')
 
@@ -156,14 +157,14 @@ STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbw
 
 netParams.stimTargetParams['bgS->ER2,ER5,ER6'] = {'source': 'backgroundS',
     'conds': {'pop': ['ER2', 'ER5','ER6']}, # background -> Exi
-    'weight': 2,
+    'weight': 2*sca,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
 netParams.stimTargetParams['bgS->IF2,IL2,IF5,IL5,IF6,IL6'] = {'source': 'backgroundS',
     'conds': {'pop': ['IF2', 'IL2','IF5','IL5','IF6', 'IL6']}, # background -> Inh
-    'weight': -2,
+    'weight': -2*sca,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
@@ -171,7 +172,7 @@ netParams.stimTargetParams['bgS->IF2,IL2,IF5,IL5,IF6,IL6'] = {'source': 'backgro
 ##
 netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
     'conds': {'pop': ['EDSC', 'IDSC']},  # Pstim_sh -> P_sh
-    'weight': 4,
+    'weight': 4*sca,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
@@ -180,15 +181,15 @@ netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
 
 netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'conds': {'pop': 'EB5'},  # Pstim_sh -> P_sh
-    'weight': 4,
+    'weight': 4*sca,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
 netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
     'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
-    'weight': 0.1,                   
-    'delay': 1,     
+    'weight': 0.1*sca,                   
+    'delay': 2,     
     'synMech': 'NMDA'} 
     
     

@@ -301,7 +301,7 @@ class Arm:
             # reset explor movs
             for cell in [c for c in f.net.cells if c.gid in [gid for sublist in f.motorCmdCellRange for gid in sublist]]:
                 for stim in cell.stims:
-                    if stim['source'] == 'stimEDSC':
+                    if stim['source'] == 'backgroundDSC':
                         stim['hNetStim'].interval = 1000.0 / self.origMotorBackgroundRate # interval in ms as a function of rate
                         break
             f.timeoflastexplor = t
@@ -402,7 +402,7 @@ class Arm:
                 self.plotAngs()
                 self.plotMotorCmds()
                 self.plotRL()
-                ion()
+                #ion()
                 show()
     
         
