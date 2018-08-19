@@ -24,8 +24,8 @@ sim.setupRecording()              # setup variables to record for each cell (spi
 
 # Arm parameters
 sim.useArm = 1  # include arm in simulation
-sim.animArm = 1  # show arm animation
-sim.graphsArm = 1  #  plot arm graphs
+sim.animArm = 0  # show arm animation
+sim.graphsArm = 0  #  plot arm graphs
 sim.updateInterval = 20  # delay between arm updated (ms)
 sim.initArmMovement = 50  # time at which to start moving arm (ms)
 sim.armLen = [0.4634 - 0.173, 0.7169 - 0.4634] # elbow - shoulder from MSM;radioulnar - elbow from MSM;  
@@ -175,10 +175,11 @@ sim.analysis.plotData()               # plot spike raster
 #sim.analysis.plotSpikeStats( include = ['ASC', 'ER2'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8), showFig = True)
 #sim.analysis.plotSpikeStats( include = ['ER2', 'IDSC','EDSC'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8),  showFig = True)
 
-
+sim.analysis.plotConn(['allCells'], groupBy='pop', showFig=True)
 sim.arm.close(sim)
 
 
 if sim.plotWeights:
 #     saveWeights(sim)
-     plotWeights()
+     pass
+	 #plotWeights()

@@ -43,9 +43,9 @@ netParams.sizeZ = 50 # z-dimension (horizontal depth) size in um
 netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in um
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
-netParams.probLengthConstInh = 300.0 # length constant for conn probability (um)
-netParams.scaleConnWeight = 0.750
-netParams.scaleConnWeightNetStims= 0.750
+netParams.probLengthConstInh =1200.0 # length constant for conn probability (um)
+netParams.scaleConnWeight = 0.030
+netParams.scaleConnWeightNetStims= 0.070
 sca = 1
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
@@ -69,7 +69,7 @@ netParams.popParams['PMd'] = {'cellModel': 'VecStim', 'spkTimes': spkTimes,
         'numCells': 96}
         
 #Ascending Spinal Cord
-netParams.popParams['ASC'] = {'cellModel': 'Nsloc', 'numCells': 64}
+netParams.popParams['ASC'] = {'cellModel': 'NetStim', 'rate':'variable','numCells': 64}
 
 #Descending Spinal Cord
 netParams.popParams['EDSC'] = {'cellModel': 'Izh2007a', 'cellType': 'RS',
@@ -135,9 +135,9 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that 
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
 #NSLOC
-cellRule = netParams.importCellParams(label='nsloc', conds={'cellModel':'Nsloc'},
- 	fileName='nslocASC.py', cellName='nslocCell')
-netParams.renameCellParamsSec('ASC', 'sec', 'soma')
+# 8cellRule = netParams.importCellParams(label='nsloc', conds={'cellModel':'Nsloc'},
+ 	# fileName='nslocASC.py', cellName='nslocCell')
+# netParams.renameCellParamsSec('ASC', 'sec', 'soma')
 
 ###########################################
 # STIMULATION PARAMETERS
