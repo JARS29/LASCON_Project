@@ -43,20 +43,27 @@ netParams.sizeZ = 50 # z-dimension (horizontal depth) size in um
 netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in um
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
-netParams.probLengthConstInh =1200.0 # length constant for conn probability (um)
-netParams.scaleConnWeight = 0.030
-netParams.scaleConnWeightNetStims= 0.070
-sca = 1
+netParams.probLengthConstInh =300.0 # length constant for conn probability (um)
+netParams.scaleConnWeight = 0.020
+netParams.scaleConnWeightNetStims= 0.50
+scaWEE = 1
+scaWEI = 1
+scaWIE = 1
+scaWII = 1
+scaWP = 1
+
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
 rawSpikesPMd = loadmat(spikesPMdFile)['pmdData']  # load raw data
 spkTimes = []
+
 
 for i in range(len(rawSpikesPMd[0][0])):
 	for j in range(len(rawSpikesPMd[0])):
 		temp=list(itertools.chain(*rawSpikesPMd[0][j][i]))
 		spkTimes.append(list(itertools.chain(*temp)))
 
+#spkTimes.append(spkTimes)
 ##
 
 
@@ -134,14 +141,11 @@ netParams.renameCellParamsSec('FS_Izhi', 'sec', 'soma')  # rename imported secti
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['vref'] = 'V' # specify that uses its own voltage V
 cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA', 'GABAA', 'GABAB']  # specify its own synapses
 
-#NSLOC
-# 8cellRule = netParams.importCellParams(label='nsloc', conds={'cellModel':'Nsloc'},
- 	# fileName='nslocASC.py', cellName='nslocCell')
-# netParams.renameCellParamsSec('ASC', 'sec', 'soma')
 
 ###########################################
 # STIMULATION PARAMETERS
 ###########################################
+
 # background inputs
 #TODO EB5 represents EM (explor movs) ? 
 netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'noise': 1, 'number': 1e10 }
@@ -157,14 +161,14 @@ STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbw
 
 netParams.stimTargetParams['bgS->ER2,ER5,ER6'] = {'source': 'backgroundS',
     'conds': {'pop': ['ER2', 'ER5','ER6']}, # background -> Exi
-    'weight': 2*sca,
+    'weight': 2,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
 netParams.stimTargetParams['bgS->IF2,IL2,IF5,IL5,IF6,IL6'] = {'source': 'backgroundS',
     'conds': {'pop': ['IF2', 'IL2','IF5','IL5','IF6', 'IL6']}, # background -> Inh
-    'weight': -2*sca,
+    'weight': 2,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
@@ -172,7 +176,7 @@ netParams.stimTargetParams['bgS->IF2,IL2,IF5,IL5,IF6,IL6'] = {'source': 'backgro
 ##
 netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
     'conds': {'pop': ['EDSC', 'IDSC']},  # Pstim_sh -> P_sh
-    'weight': 4*sca,
+    'weight': 4,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
@@ -181,14 +185,14 @@ netParams.stimTargetParams['bgDSC->EDSC,IDSC'] = {'source': 'backgroundDSC',
 
 netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'conds': {'pop': 'EB5'},  # Pstim_sh -> P_sh
-    'weight': 4*sca,
+    'weight': 4,
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
 
 netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
     'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
-    'weight': 0.1*sca,                   
+    'weight': 0.1,                   
     'delay': 2,     
     'synMech': 'NMDA'} 
     
@@ -199,7 +203,7 @@ netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC',
 netParams.connParams['ER2->ER2'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER2'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',   # probability of connection
  'synMech': 'AMPA',
  'sec': 'soma'}
@@ -207,7 +211,7 @@ netParams.connParams['ER2->ER2'] = {
 # Sensory
 netParams.connParams['ER2->EB5'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'EB5'},  # P_sh,P_el -> ES
- 'weight': 0.36,
+ 'weight': 0.36*scaWEE,
  'probability': '25*1.6*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -216,7 +220,7 @@ netParams.connParams['ER2->EB5'] = {
 
 netParams.connParams['ER2->ER5'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'ER5'},  # ES -> ES
- 'weight': 0.93,
+ 'weight': 0.93*scaWEE,
  'probability': '25*1.6*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -226,7 +230,7 @@ netParams.connParams['ER2->ER5'] = {
 
 netParams.connParams['ER2->IL5'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
- 'weight': 0.36,
+ 'weight': 0.36*scaWEI,
  'probability': '25*0.51*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -234,7 +238,7 @@ netParams.connParams['ER2->IL5'] = {
 
 netParams.connParams['ER2->ER6'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
- 'weight': 0,
+ 'weight': 0*scaWEE,
  'probability': 0,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -242,7 +246,7 @@ netParams.connParams['ER2->ER6'] = {
 
 netParams.connParams['ER2->IL2'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IL2'},  # ES -> ES
- 'weight': 0.23,
+ 'weight': 0.23*scaWEI,
  'probability': '25*0.51*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -251,7 +255,7 @@ netParams.connParams['ER2->IL2'] = {
 
 netParams.connParams['ER2->IF2'] = {
  'preConds': {'pop': 'ER2'}, 'postConds': {'pop': 'IF2'},  # ES -> ES
- 'weight': 0.23,
+ 'weight': 0.23*scaWEI,
  'probability': '25*0.43*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -259,7 +263,7 @@ netParams.connParams['ER2->IF2'] = {
 
 netParams.connParams['EB5->ER2'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'ER2'},  # ES -> ES
- 'weight': 0,
+ 'weight': 0*scaWEE,
  'probability': 0,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -267,7 +271,7 @@ netParams.connParams['EB5->ER2'] = {
 
 netParams.connParams['EB5->EB5'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'EB5'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.16*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -276,7 +280,7 @@ netParams.connParams['EB5->EB5'] = {
 
 netParams.connParams['EB5->ER5'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'ER5'},  # ES -> ES
- 'weight': 0,
+ 'weight': 0*scaWEE,
  'probability': 0,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -284,7 +288,7 @@ netParams.connParams['EB5->ER5'] = {
 
 netParams.connParams['EB5->ER6'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'ER6'},  # ES -> ES
- 'weight': 0,
+ 'weight': 0*scaWEE,
  'probability': 0,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -293,7 +297,7 @@ netParams.connParams['EB5->ER6'] = {
 
 netParams.connParams['EB5->IL5'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
- 'weight': 0,
+ 'weight': 0*scaWEI,
  'probability': 0,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -301,7 +305,7 @@ netParams.connParams['EB5->IL5'] = {
 
 netParams.connParams['EB5->IF5'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IF5'},  # ES -> ES
- 'weight': 0.23,
+ 'weight': 0.23*scaWEI,
  'probability': '25*0.43*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -309,7 +313,7 @@ netParams.connParams['EB5->IF5'] = {
 
 netParams.connParams['ER5->ER2'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'ER2'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -318,7 +322,7 @@ netParams.connParams['ER5->ER2'] = {
 
 netParams.connParams['ER5->EB5'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'EB5'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.84*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -328,7 +332,7 @@ netParams.connParams['ER5->EB5'] = {
 
 netParams.connParams['ER5->ER5'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'ER5'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.44*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -336,7 +340,7 @@ netParams.connParams['ER5->ER5'] = {
 
 netParams.connParams['ER5->ER6'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'ER6'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -344,15 +348,15 @@ netParams.connParams['ER5->ER6'] = {
 
 netParams.connParams['ER5->IL5'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'IL5'},  # ES -> ES
- 'weight': 0,
- 'probability': 0,
+ 'weight': 0*scaWEI,
+ 'probability': 0*scaWP,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
  'sec': 'soma'}
 
 netParams.connParams['ER5->IF5'] = {
  'preConds': {'pop': 'ER5'}, 'postConds': {'pop': 'IF5'},  # ES -> ES
- 'weight': 0.46,
+ 'weight': 0.46*scaWEI,
  'probability': '25*0.43*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -360,8 +364,8 @@ netParams.connParams['ER5->IF5'] = {
 
 netParams.connParams['ER6->ER2'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'ER2'},  # ES -> ES
- 'weight': 0,
- 'probability': 0,
+ 'weight': 0*scaWEE,
+ 'probability': 0*scaWP,
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
  'sec': 'soma'}
@@ -369,7 +373,7 @@ netParams.connParams['ER6->ER2'] = {
 
 netParams.connParams['ER6->EB5'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'EB5'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -377,7 +381,7 @@ netParams.connParams['ER6->EB5'] = {
 
 netParams.connParams['ER6->ER5'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'ER5'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -385,7 +389,7 @@ netParams.connParams['ER6->ER5'] = {
 
 netParams.connParams['ER6->ER6'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'ER6'},  # ES -> ES
- 'weight': 0.66,
+ 'weight': 0.66*scaWEE,
  'probability': '25*0.2*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -393,7 +397,7 @@ netParams.connParams['ER6->ER6'] = {
 
 netParams.connParams['ER6->IL6'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'IL6'},  # ES -> ES
- 'weight': 0.23,
+ 'weight': 0.23*scaWEI,
  'probability': '25*0.51*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -401,7 +405,7 @@ netParams.connParams['ER6->IL6'] = {
 
 netParams.connParams['ER6->IF6'] = {
  'preConds': {'pop': 'ER6'}, 'postConds': {'pop': 'IF6'},  # ES -> ES
- 'weight': 0.23,
+ 'weight': 0.23*scaWEI,
  'probability': '25*0.43*exp(-dist_3D/probLengthConstExc)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'AMPA',
@@ -409,7 +413,7 @@ netParams.connParams['ER6->IF6'] = {
 
 netParams.connParams['IL2->ER2'] = {
  'preConds': {'pop': 'IL2'}, 'postConds': {'pop': 'ER2'},  # ES -> ES
- 'weight': 0.83,
+ 'weight': 0.83*scaWIE,
  'probability': '25*0.35*exp(-dist_3D/probLengthConstInh)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'GABAB',
@@ -418,7 +422,7 @@ netParams.connParams['IL2->ER2'] = {
 
 netParams.connParams['IL2->IL2'] = {
  'preConds': {'pop': 'IL2'}, 'postConds': {'pop': 'IL2'},  # ES -> ES
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*0.09*exp(-dist_3D/probLengthConstInh)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'GABAB',
@@ -427,7 +431,7 @@ netParams.connParams['IL2->IL2'] = {
 
 netParams.connParams['IL2->IF2'] = {
  'preConds': {'pop': 'IL2'}, 'postConds': {'pop': 'IF2'},  # ES -> ES
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*0.53*exp(-dist_3D/probLengthConstInh)',
  'delay': '2+dist_3D/propVelocity',
  'synMech': 'GABAB',
@@ -436,7 +440,7 @@ netParams.connParams['IL2->IF2'] = {
 netParams.connParams['IF2->ER2'] = {
  'preConds': {'pop': 'IF2'}, 'postConds': {'pop': 'ER2'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWIE,
  'probability': '25*.44*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -444,7 +448,7 @@ netParams.connParams['IF2->ER2'] = {
 netParams.connParams['IF2->IL2'] = {
  'preConds': {'pop': 'IF2'}, 'postConds': {'pop': 'IL2'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.34*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -452,7 +456,7 @@ netParams.connParams['IF2->IL2'] = {
 netParams.connParams['IF2->IF2'] = {
  'preConds': {'pop': 'IF2'}, 'postConds': {'pop': 'IF2'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.62*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -460,7 +464,7 @@ netParams.connParams['IF2->IF2'] = {
 netParams.connParams['IL5->EB5'] = {
  'preConds': {'pop': 'IL5'}, 'postConds': {'pop': 'EB5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': .83,
+ 'weight': .83*scaWIE,
  'probability': '25*.35*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -468,7 +472,7 @@ netParams.connParams['IL5->EB5'] = {
 netParams.connParams['IL5->ER5'] = {
  'preConds': {'pop': 'IL5'}, 'postConds': {'pop': 'ER5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': .83,
+ 'weight': .83*scaWIE,
  'probability': '25*.35*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -476,7 +480,7 @@ netParams.connParams['IL5->ER5'] = {
 netParams.connParams['IL5->IL5'] = {
  'preConds': {'pop': 'IL5'}, 'postConds': {'pop': 'IL5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.09*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -484,7 +488,7 @@ netParams.connParams['IL5->IL5'] = {
 netParams.connParams['IL5->IF5'] = {
  'preConds': {'pop': 'IL5'}, 'postConds': {'pop': 'IF5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.53*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -492,7 +496,7 @@ netParams.connParams['IL5->IF5'] = {
 netParams.connParams['IF5->EB5'] = {
  'preConds': {'pop': 'IF5'}, 'postConds': {'pop': 'EB5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWIE,
  'probability': '25*.44*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -500,7 +504,7 @@ netParams.connParams['IF5->EB5'] = {
 netParams.connParams['IF5->ER5'] = {
  'preConds': {'pop': 'IF5'}, 'postConds': {'pop': 'ER5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWIE,
  'probability': '25*.44*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -508,7 +512,7 @@ netParams.connParams['IF5->ER5'] = {
 netParams.connParams['IF5->IL5'] = {
  'preConds': {'pop': 'IF5'}, 'postConds': {'pop': 'IL5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.34*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -516,7 +520,7 @@ netParams.connParams['IF5->IL5'] = {
 netParams.connParams['IF5->IF5'] = {
  'preConds': {'pop': 'IF5'}, 'postConds': {'pop': 'IF5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.62*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -524,7 +528,7 @@ netParams.connParams['IF5->IF5'] = {
 netParams.connParams['IL6->ER6'] = {
  'preConds': {'pop': 'IL6'}, 'postConds': {'pop': 'ER6'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': .83,
+ 'weight': .83*scaWIE,
  'probability': '25*.35*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -532,7 +536,7 @@ netParams.connParams['IL6->ER6'] = {
 netParams.connParams['IL6->IL6'] = {
  'preConds': {'pop': 'IL6'}, 'postConds': {'pop': 'IL6'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.09*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -540,7 +544,7 @@ netParams.connParams['IL6->IL6'] = {
 netParams.connParams['IL6->IF6'] = {
  'preConds': {'pop': 'IL6'}, 'postConds': {'pop': 'IF6'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.53*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAB',
  'sec': 'soma'}
@@ -548,7 +552,7 @@ netParams.connParams['IL6->IF6'] = {
 netParams.connParams['IF6->ER6'] = {
  'preConds': {'pop': 'IF6'}, 'postConds': {'pop': 'ER6'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWIE,
  'probability': '25*.44*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -556,7 +560,7 @@ netParams.connParams['IF6->ER6'] = {
 netParams.connParams['IF6->IF6'] = {
  'preConds': {'pop': 'IF6'}, 'postConds': {'pop': 'IF6'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 1.5,
+ 'weight': 1.5*scaWII,
  'probability': '25*.62*exp(-dist_3D/probLengthConstInh)',
  'synMech': 'GABAA',
  'sec': 'soma'}
@@ -573,7 +577,7 @@ netParams.connParams['ASC->ER2'] = {
 netParams.connParams['EB5->EDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'EDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.0,
+ 'weight': 2.0*scaWEE,
  'probability': '25*1.0*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
  'sec': 'soma',
@@ -582,8 +586,8 @@ netParams.connParams['EB5->EDSC'] = {
 netParams.connParams['EB5->IDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 0.5,
- 'probability': 0,
+ 'weight': 0.5*scaWEI,
+ 'probability': 0*scaWP,
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
@@ -591,8 +595,8 @@ netParams.connParams['EB5->IDSC'] = {
 netParams.connParams['IDSC->EDSC'] = {
  'preConds': {'pop': 'IDSC'}, 'postConds': {'pop': 'EDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 0.5,
- 'probability': 0,
+ 'weight': 0.5*scaWIE,
+ 'probability': 0*scaWP,
  'synMech': 'AMPA',
  'sec': 'soma'}
 
@@ -621,27 +625,31 @@ simConfig.verbose = False # show detailed messages
 
 # Recording 
 simConfig.recordCells = ['all']  # list of cells to record from 
+#simConfig.saveLFPCells = True
 simConfig.recordTraces = {}
 # 'V':{'sec':'soma','loc':0.5,'var':'v'}, 
-#     'u':{'sec':'soma', 'pointp':'Izhi', 'var':'u'}, 
-#     'I':{'sec':'soma', 'pointp':'Izhi', 'var':'i'}, 
-#     'NMDA_g': {'sec':'soma', 'loc':0.5, 'synMech':'NMDA', 'var':'g'},
-#     'NMDA_i': {'sec':'soma', 'loc':0.5, 'synMech':'NMDA', 'var':'i'},
-#     'GABA_g': {'sec':'soma', 'loc':0.5, 'synMech':'GABA', 'var':'g'},
-#     'GABA_i': {'sec':'soma', 'loc':0.5, 'synMech':'GABA', 'var':'i'}}
+    # 'u':{'sec':'soma', 'pointp':'Izhi', 'var':'u'}, 
+    # 'I':{'sec':'soma', 'pointp':'Izhi', 'var':'i'}, 
+    # 'NMDA_g': {'sec':'soma', 'loc':0.5, 'synMech':'NMDA', 'var':'g'},
+    # 'NMDA_i': {'sec':'soma', 'loc':0.5, 'synMech':'NMDA', 'var':'i'},
+    # 'GABA_g': {'sec':'soma', 'loc':0.5, 'synMech':'GABA', 'var':'g'},
+    # 'GABA_i': {'sec':'soma', 'loc':0.5, 'synMech':'GABA', 'var':'i'}}
 simConfig.recordStim = True  # record spikes of cell stims
 simConfig.recordStep = 1.0 # Step size in ms to save data (eg. V traces, LFP, etc)
 
 # Saving
-simConfig.filename = 'simdata'  # Set file output name
-simConfig.saveFileStep = 1000 # step size in ms to save data to disk
+simConfig.filename = 'simData'  # Set file output name
+#simConfig.saveFileStep = 1500 # step size in ms to save data to disk
 simConfig.savePickle = False # Whether or not to write spikes etc. to a .mat file
 simConfig.saveJson = False # Whether or not to write spikes etc. to a .mat file
 simConfig.saveMat = True # Whether or not to write spikes etc. to a .mat file
 simConfig.saveTxt = False # save spikes and conn to txt file
 simConfig.saveDpk = False # save to a .dpk pickled file
 
+#simConfig.recordLFP = [[100, 100, 100]]
 
+#simConfig.analysis['plotLFP'] = {'includeAxon': False, 'plots': ['timeSeries', 'locations'], 'figSize': (5,9), 'saveFig': True} 
+ 
 # Analysis and plotting
 simConfig.analysis['plotRaster'] = True # Whether or not to plot a raster
 

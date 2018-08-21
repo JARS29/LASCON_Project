@@ -77,7 +77,7 @@ sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
 sim.numTargets = 1
-sim.targetid = 3 # target to train+test
+sim.targetid = 1 # target to train+test
 #rint sim.targetid
 sim.trialTargets = [3,3,3] #[i % sim.numTargets for i in range(int(sim.numTrials+1))]
 
@@ -175,7 +175,7 @@ sim.analysis.plotData()               # plot spike raster
 #sim.analysis.plotSpikeStats( include = ['ASC', 'ER2'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8), showFig = True)
 #sim.analysis.plotSpikeStats( include = ['ER2', 'IDSC','EDSC'], timeRange=[200,800], graphType='boxplot', stats = ['isicv', 'sync'], figSize = (6,8),  showFig = True)
 
-sim.analysis.plotConn(['allCells'], groupBy='pop', showFig=True)
+#sim.analysis.plotConn(['allCells'], groupBy='pop', showFig=True)
 sim.arm.close(sim)
 
 
