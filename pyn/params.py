@@ -50,7 +50,7 @@ scaWEE = 1
 scaWEI = 1
 scaWIE = 1
 scaWII = 1
-scaWP = 1
+scaWP = 200
 
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
@@ -151,7 +151,6 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA',
 netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'noise': 1, 'number': 1e10 }
 netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3, 'number': 1e10}
 netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
-netParams.stimSourceParams['stimASC'] = {'type': 'NetStim', 'rate': 'variable', 'noise': 0} # stim inputs for ASC
 
 
 STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.025, 'RLantiwt': -0.025, \
@@ -189,12 +188,6 @@ netParams.stimTargetParams['bgEB5->EB5'] = {'source': 'backgroundEB5',
     'delay': 2,
     'synMech': 'NMDA',
     'sec': 'soma'}
-
-netParams.stimTargetParams['stimASC->ASC'] = {'source': 'stimASC', 
-    'conds': {'pop': 'ASC'},  # Pstim_sh -> P_sh
-    'weight': 0.1,                   
-    'delay': 2,     
-    'synMech': 'NMDA'} 
     
     
 ###########################################
@@ -586,8 +579,8 @@ netParams.connParams['EB5->EDSC'] = {
 netParams.connParams['EB5->IDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 0.5*scaWEI,
- 'probability': 0*scaWP,
+ 'weight': 2.5*scaWEI,
+ 'probability': '25*1.0*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
@@ -595,8 +588,8 @@ netParams.connParams['EB5->IDSC'] = {
 netParams.connParams['IDSC->EDSC'] = {
  'preConds': {'pop': 'IDSC'}, 'postConds': {'pop': 'EDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 0.5*scaWIE,
- 'probability': 0*scaWP,
+ 'weight': 2.5*scaWIE,
+ 'probability': '25*1.0*exp(-dist_3D/probLengthConstExc)',
  'synMech': 'AMPA',
  'sec': 'soma'}
 
@@ -615,7 +608,7 @@ netParams.connParams['PMd->ER5'] = {
 
 # Simulation parameters
 # TODO following line doesnt appear to make a difference
-#simConfig.duration = 3*1e3 # Duration of the simulation, in ms
+#simConfig.duration = 2*1e3 # Duration of the simulation, in ms
 simConfig.dt = 0.1 # Internal integration timestep to use
 simConfig.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (connectivity, input stimulation and cell locations)
 simConfig.createNEURONObj = True  # create HOC objects when instantiating network
@@ -638,8 +631,8 @@ simConfig.recordStim = True  # record spikes of cell stims
 simConfig.recordStep = 1.0 # Step size in ms to save data (eg. V traces, LFP, etc)
 
 # Saving
-simConfig.filename = 'simData'  # Set file output name
-#simConfig.saveFileStep = 1500 # step size in ms to save data to disk
+simConfig.filename = 'simdata'  # Set file output name
+simConfig.saveFileStep = 1000 # step size in ms to save data to disk
 simConfig.savePickle = False # Whether or not to write spikes etc. to a .mat file
 simConfig.saveJson = False # Whether or not to write spikes etc. to a .mat file
 simConfig.saveMat = True # Whether or not to write spikes etc. to a .mat file

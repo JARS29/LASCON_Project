@@ -24,10 +24,10 @@ sim.setupRecording()              # setup variables to record for each cell (spi
 
 # Arm parameters
 sim.useArm = 1  # include arm in simulation
-sim.animArm = 0  # show arm animation
-sim.graphsArm = 0  #  plot arm graphs
+sim.animArm = 1  # show arm animation
+sim.graphsArm = 1  #  plot arm graphs
 sim.updateInterval = 20  # delay between arm updated (ms)
-sim.initArmMovement = 50  # time at which to start moving arm (ms)
+sim.initArmMovement = 250  # time at which to start moving arm (ms)
 sim.armLen = [0.4634 - 0.173, 0.7169 - 0.4634] # elbow - shoulder from MSM;radioulnar - elbow from MSM;  
 sim.startAng = [0.62,1.53] # starting shoulder and elbow angles (rad) = natural rest position
 sim.targetDist = 0.15 # target distance from center (15 cm)
@@ -39,16 +39,16 @@ sim.pop_el = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'ASC
 sim.minPval = radians(-30) 
 sim.maxPval = radians(135)
 sim.minPrate = 0.01
-sim.maxPrate = 100
+sim.maxPrate = 200
 
 # Motor encoding
 sim.nMuscles = 4 # number of muscles
 motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC']
 cellsPerMuscle = len(motorGids) / sim.nMuscles
 sim.motorCmdCellRange = [motorGids[i:i+cellsPerMuscle] for i in xrange(0, len(motorGids), cellsPerMuscle)]  # cell gids of motor output to each muscle
-sim.cmdmaxrate = 120  # value to normalize motor command num spikes
-sim.cmdtimewin = 50  # window to sum spikes of motor commands
-sim.antagInh = 1  # inhibition from antagonic muscle
+sim.cmdmaxrate = 20  # value to normalize motor command num spikes
+sim.cmdtimewin = 100  # window to sum spikes of motor commands
+sim.antagInh = 0  # inhibition from antagonic muscle
 
 # RL
 sim.useRL = 1
@@ -77,7 +77,7 @@ sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
 sim.numTargets = 1
-sim.targetid = 1 # target to train+test
+sim.targetid = 3 # target to train+test
 #rint sim.targetid
 sim.trialTargets = [3,3,3] #[i % sim.numTargets for i in range(int(sim.numTrials+1))]
 
@@ -180,6 +180,6 @@ sim.arm.close(sim)
 
 
 if sim.plotWeights:
-#     saveWeights(sim)
-     pass
-	 #plotWeights()
+	#saveWeights(sim)
+    pass
+	#plotWeights()

@@ -230,7 +230,7 @@ class Arm:
         self.minPval = f.minPval
         self.maxPrate = f.maxPrate
         self.minPrate = f.minPrate
-        angInterval = (self.maxPval - self.minPval) / (self.numPcells - 1) # angle interval (times 2 because shoulder+elbow)
+        angInterval = (self.maxPval - self.minPval) / (self.numPcells - 2) * 2 # angle interval (times 2 because shoulder+elbow)
 
         cellPranges = {}
         currentPval = f.minPval  
@@ -317,7 +317,7 @@ class Arm:
                 spktvec = spktvec[inds]
                 spkgids = spkgids[inds]
                 cmdVecs = array([spkt for spkt,spkid in zip(spktvec, spkgids) if spkid in f.motorCmdCellRange[i]]) # CK: same outcome, but much slower: cmdVecs = array([spkt for spkt,spkid in zip(f.simData['spkt'], f.simData['spkid']) if spkid in f.motorCmdCellRange[i]])
-                self.motorCmd[i] = len(cmdVecs[(cmdVecs < t) * (cmdVecs > t-self.cmdtimewin)])
+                self.motorCmd[i] = sum([len(x[(x < t) * (x > t-self.cmdtimewin)]) for x in cmdVecs])  #TODO Verify if this should be as RL example
                 f.pc.allreduce(self.vec.from_python([self.motorCmd[i]]), 1) # sum
                 self.motorCmd[i] = self.vec.to_python()[0]        
          
@@ -345,29 +345,26 @@ class Arm:
         [self.ang[SH], self.ang[EL], self.angVel[SH], self.angVel[EL], self.handPos[SH], self.handPos[EL]] = dataReceived # map data received to shoulder and elbow angles
         
         # Update cells response based on virtual arm proprioceptive feedback (angles)
+		
         for cell in [c for c in f.net.cells if c.gid in f.pop_sh]:   # shoulder
-            if (self.ang[SH] >= cell.prange[0] and self.ang[SH] < cell.prange[1]):  # in angle in range -> high firing rate
-                for stim in cell.stims:
-                    if stim['source'] == 'stimASC':
-                        stim['hNetStim'].interval = 1000/self.maxPrate # interval in ms as a function of rate
-                        break
-            else: # if angle not in range -> low firing rate
-                for stim in cell.stims:
-                    if stim['source'] == 'stimASC':
-                        stim['hNetStim'].interval = 1000.0/self.minPrate # interval in ms as a function of rate
-                        break
-
+			if (self.ang[SH] >= cell.prange[0] and self.ang[SH] < cell.prange[1]):  # in angle in range -> high firing rate
+				cell.params['rate']= 1000/self.maxPrate # interval in ms as a function of rate
+				print([cell.params['rate'], 1])
+				break
+			else: # if angle not in range -> low firing rate
+				cell.params['rate']= 1000.0/self.minPrate # interval in ms as a function of rate
+				print([cell.params['rate'], 2])
+				break
+				
         for cell in [c for c in f.net.cells if c.gid in f.pop_el]:   # elbow
-            if (self.ang[EL] >= cell.prange[0] and self.ang[EL] < cell.prange[1]):  # in angle in range -> high firing rate
-                for stim in cell.stims:
-                    if stim['source'] == 'stimASC':
-                        stim['hNetStim'].interval = 1000.0/self.maxPrate # interval in ms as a function of rate
-                        break
-            else: # if angle not in range -> low firing rate
-                for stim in cell.stims:
-                    if stim['source'] == 'stimASC':
-                        stim['hNetStim'].interval = 1000.0/self.minPrate # interval in ms as a function of rate
-                        break
+			if (self.ang[EL] >= cell.prange[0] and self.ang[EL] < cell.prange[1]):  # in angle in range -> high firing rate
+				cell.params['rate']= 1000/self.maxPrate # interval in ms as a function of rate
+				print([cell.params['rate'] , 3])
+				break
+			else: # if angle not in range -> low firing rate
+				cell.params['rate']= 1000.0/self.minPrate # interval in ms as a function of rate
+				print([cell.params['rate'], 4])
+				break
 
 
         # Calculate error between hand and target for interval between RL updates 
