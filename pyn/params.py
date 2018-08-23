@@ -44,13 +44,13 @@ netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh =300.0 # length constant for conn probability (um)
-netParams.scaleConnWeight = 0.019
-netParams.scaleConnWeightNetStims= 0.68
-scaWEE = 1#.5
-scaWEI = 1#.5*2.0
-scaWIE = 1#.5*1.5
-scaWII = 1##.5
-scaP = 200/4
+netParams.scaleConnWeight = 0.017
+netParams.scaleConnWeightNetStims= 0.56
+scaWEE = 1.5
+scaWEI = 1.5*2.0
+scaWIE = 1.5*1.5
+scaWII = 1.5
+scaP = 20*10 #rise this value genearates a ISCS spikes
 
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
@@ -148,9 +148,9 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA',
 
 # background inputs
 #TODO EB5 represents EM (explor movs) ? 
-netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 134**-1*1e3, 'noise': 1, 'number': 1e10 }
+netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 134.5**-1*1e3, 'noise': 1, 'number': 1e10 }
 netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3, 'number': 1e10}
-netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 134**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
+netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 134.5**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
 
 
 STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.025, 'RLantiwt': -0.025, \

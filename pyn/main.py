@@ -46,14 +46,14 @@ sim.nMuscles = 4 # number of muscles
 motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC']
 cellsPerMuscle = len(motorGids) / sim.nMuscles
 sim.motorCmdCellRange = [motorGids[i:i+cellsPerMuscle] for i in xrange(0, len(motorGids), cellsPerMuscle)]  # cell gids of motor output to each muscle
-sim.cmdmaxrate = 10.8  # value to normalize motor command num spikes
+sim.cmdmaxrate = 5  # value to normalize motor command num spikes #TODO  Motor commmand threshold?
 sim.cmdtimewin = 100  # window to sum spikes of motor commands
 sim.antagInh = 1  # inhibition from antagonic muscle
 
 # RL
 sim.useRL = 1
 sim.timeoflastRL = -inf
-sim.RLinterval = 76
+sim.RLinterval = 76.8
 sim.minRLerror = 0.002 # minimum error change for RL (m)
 sim.targetid = 3 # initial target
 sim.allWeights = [] # list to store weights
@@ -62,8 +62,8 @@ sim.plotWeights = 1  # plot weights
 
 # Exploratory movements
 sim.explorMovs = 1 # exploratory movements (noise to EM pop)
-sim.explorMovsRate = 25 # stim max firing rate for motor neurons of specific muscle groups to enforce explor movs
-sim.explorMovsDur = 500 # max duration of each excitation to each muscle during exploratory movments init = 1000
+sim.explorMovsRate = 70 # stim max firing rate for motor neurons of specific muscle groups to enforce explor movs
+sim.explorMovsDur = 500# max duration of each excitation to each muscle during exploratory movments init = 1000
 sim.timeoflastexplor = -inf # time when last exploratory movement was updated
 sim.randseed = 5  # random seed
 
@@ -72,7 +72,7 @@ sim.trialReset = True # whether to reset the arm after every trial time
 sim.timeoflastreset = 0 # time when arm was last reseted
 
 # train/test params
-sim.trainTime = 1 * 1e3
+sim.trainTime = 1* 1e3
 sim.testTime = 1 * 1e3
 sim.cfg.duration = sim.trainTime + sim.testTime
 sim.numTrials = ceil(sim.cfg.duration/1e3)
