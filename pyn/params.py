@@ -36,7 +36,7 @@ simConfig = specs.SimConfig()   # object of class SimConfig to store the simulat
 
 #netParams.scaleConnWeight = 0.001 # Connection weight scale factor
 # General network parameters
-netParams.scale = 1 # Scale factor for number of cells
+netParams.scale = 1# Scale factor for number of cells
 # TODO could not find information about distances on the plane
 netParams.sizeX = 50 # x-dimension (horizontal length) size in um
 netParams.sizeZ = 50 # z-dimension (horizontal depth) size in um
@@ -44,13 +44,13 @@ netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
 netParams.probLengthConstInh =300.0 # length constant for conn probability (um)
-netParams.scaleConnWeight = 0.020
-netParams.scaleConnWeightNetStims= 0.50
-scaWEE = 1.5
-scaWEI = 1.5*2.0
-scaWIE = 1.5*1.5
-scaWII = 1.5
-scaP = 200/8
+netParams.scaleConnWeight = 0.019
+netParams.scaleConnWeightNetStims= 0.68
+scaWEE = 1#.5
+scaWEI = 1#.5*2.0
+scaWIE = 1#.5*1.5
+scaWII = 1##.5
+scaP = 200/4
 
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
@@ -148,13 +148,13 @@ cellRule['secs']['soma']['pointps']['Izhi2007a_0']['synList'] = ['AMPA', 'NMDA',
 
 # background inputs
 #TODO EB5 represents EM (explor movs) ? 
-netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'noise': 1, 'number': 1e10 }
+netParams.stimSourceParams['backgroundS'] = {'type': 'NetStim', 'interval': 134**-1*1e3, 'noise': 1, 'number': 1e10 }
 netParams.stimSourceParams['backgroundDSC'] = {'type': 'NetStim', 'interval': 0.1**-1*1e3, 'rate': 'variable', 'noise': 0.3, 'number': 1e10}
-netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 100**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
+netParams.stimSourceParams['backgroundEB5'] = {'type': 'NetStim', 'interval': 134**-1*1e3, 'rate': 'variable', 'noise': 1, 'number': 1e10}
 
 
 STDPparams = {'hebbwt': 0.001, 'antiwt':-0.0013, 'wmax': 8, 'RLon': 1 , 'RLhebbwt': 0.025, 'RLantiwt': -0.025, \
-    'tauhebb': 48.5, 'RLwindhebb': 50, 'useRLexp': 0, 'softthresh': 1, 'verbose':0}
+    'tauhebb': 48.5, 'RLwindhebb': 117.8 , 'useRLexp': 0, 'softthresh': 1, 'verbose':0}
 
 
 
@@ -587,8 +587,8 @@ netParams.connParams['EB5->EDSC'] = {
 netParams.connParams['EB5->IDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.5*scaWEI,
- 'probability': 2.0*scaP,
+ 'weight': 2.0*scaWEI,
+ 'probability':1.0*scaP,
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
@@ -604,8 +604,8 @@ netParams.connParams['IDSC->EDSC'] = {
 netParams.connParams['PMd->ER5'] = {
  'preConds': {'pop': 'PMd'}, 'postConds': {'pop': 'ER5'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.0,
- 'probability': 2.0,
+ 'weight': 1.0,
+ 'probability': 2.4,
  'synMech': 'AMPA',
  'sec': 'soma',
  'plast': {'mech': 'STDP', 'params': STDPparams}}
