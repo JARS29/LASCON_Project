@@ -46,8 +46,8 @@ sim.nMuscles = 4 # number of muscles
 motorGids = [gid for gid,tags in allCellTags.iteritems() if tags['pop'] == 'EDSC']
 cellsPerMuscle = len(motorGids) / sim.nMuscles
 sim.motorCmdCellRange = [motorGids[i:i+cellsPerMuscle] for i in xrange(0, len(motorGids), cellsPerMuscle)]  # cell gids of motor output to each muscle
-sim.cmdmaxrate = 5  # value to normalize motor command num spikes #TODO  Motor commmand threshold?
-sim.cmdtimewin = 100  # window to sum spikes of motor commands
+sim.cmdmaxrate = 70  # value to normalize motor command num spikes #TODO  Motor commmand threshold?
+sim.cmdtimewin = 90  # window to sum spikes of motor commands
 sim.antagInh = 1  # inhibition from antagonic muscle
 
 # RL
@@ -62,7 +62,7 @@ sim.plotWeights = 1  # plot weights
 
 # Exploratory movements
 sim.explorMovs = 1 # exploratory movements (noise to EM pop)
-sim.explorMovsRate = 70 # stim max firing rate for motor neurons of specific muscle groups to enforce explor movs
+sim.explorMovsRate = 80 # stim max firing rate for motor neurons of specific muscle groups to enforce explor movs
 sim.explorMovsDur = 500# max duration of each excitation to each muscle during exploratory movments init = 1000
 sim.timeoflastexplor = -inf # time when last exploratory movement was updated
 sim.randseed = 5  # random seed

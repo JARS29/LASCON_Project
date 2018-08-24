@@ -43,14 +43,14 @@ netParams.sizeZ = 50 # z-dimension (horizontal depth) size in um
 netParams.sizeY = 1350 # y-dimension (vertical height or cortical depth) size in um
 netParams.propVelocity = 100.0 # propagation velocity (um/ms)
 netParams.probLengthConstExc = 200.0 # length constant for conn probability (um)
-netParams.probLengthConstInh =300.0 # length constant for conn probability (um)
-netParams.scaleConnWeight = 0.017
-netParams.scaleConnWeightNetStims= 0.56
-scaWEE = 1.5
-scaWEI = 1.5*2.0
-scaWIE = 1.5*1.5
-scaWII = 1.5
-scaP = 20*10 #rise this value genearates a ISCS spikes
+netParams.probLengthConstInh =400.0 # length constant for conn probability (um)
+netParams.scaleConnWeight = 0.0192
+netParams.scaleConnWeightNetStims= 0.6
+scaWEE = 1#.5
+scaWEI = 1#.5*1.5
+scaWIE = 1#.5*1.5
+scaWII = 1#.5*1
+scaP = 40#*10 #rise this value genearates a ISCS spikes
 
 # Including Spikes data
 spikesPMdFile = 'pmdData.mat'
@@ -578,7 +578,7 @@ netParams.connParams['ASC->ER2'] = {
 netParams.connParams['EB5->EDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'EDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.0*scaWEE,
+ 'weight': 2.5*scaWEE,
  'probability': 1.0*scaP,
  'synMech': 'AMPA',
  'sec': 'soma',
@@ -587,7 +587,7 @@ netParams.connParams['EB5->EDSC'] = {
 netParams.connParams['EB5->IDSC'] = {
  'preConds': {'pop': 'EB5'}, 'postConds': {'pop': 'IDSC'}, 
  'delay': '2+dist_3D/propVelocity',
- 'weight': 2.0*scaWEI,
+ 'weight': 2.5*scaWEI,
  'probability':1.0*scaP,
  'synMech': 'AMPA',
  'sec': 'soma',
@@ -602,7 +602,7 @@ netParams.connParams['IDSC->EDSC'] = {
  'sec': 'soma'}
 
 netParams.connParams['PMd->ER5'] = {
- 'preConds': {'pop': 'PMd'}, 'postConds': {'pop': 'ER5'}, 
+ 'preConds': {'pop': 'PMd'}, 'postConds': {'pop': 'ER5'},
  'delay': '2+dist_3D/propVelocity',
  'weight': 1.0,
  'probability': 2.4,
